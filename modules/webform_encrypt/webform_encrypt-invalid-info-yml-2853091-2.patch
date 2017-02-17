@@ -1,0 +1,17 @@
+diff --git a/webform_encrypt.info.yml b/webform_encrypt.info.yml
+index f031dc2..734c4f3 100644
+--- a/webform_encrypt.info.yml
++++ b/webform_encrypt.info.yml
+@@ -1,8 +1,8 @@
+-name: 'Webform Encrypt'
++name: Webform Encrypt
+ type: module
+ description: 'Provides encryption for webform components.'
+-package: 'Webform'
++package: Webform
+ core: 8.x
+ dependencies:
+-  - 'webform'
+-  - 'encrypt'
++  - webform
++  - encrypt
