@@ -1,0 +1,15 @@
+csv_import_root:
+  path: '/admin/config/csv_import'
+  defaults:
+    _controller: '\Drupal\csv_import\Controller\AdminController::content'
+    _title: 'Node Import Using CSV'
+  requirements: 
+    _permission: 'access content'
+
+csv_import_add:
+  path: '/admin/config/csv_import/add'
+  defaults:
+     _form: '\Drupal\csv_import\Form\AddForm'
+     _title: 'Create Importer'
+  requirements: 
+    _permission: 'access content'

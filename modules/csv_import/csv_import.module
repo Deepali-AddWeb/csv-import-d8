@@ -1,0 +1,13 @@
+<?php
+
+function csv_import_menu() {
+  $items['/admin/config/csv_import'] = array(
+    'title' => 'Importer list',
+    'route' => 'csv_import_root',
+  );
+  $items['/admin/config/csv_import/add'] = array(
+    'title' => 'Add csv importer',
+    'route' => 'csv_import_add',
+  );
+  return $items;
+}
