@@ -14,14 +14,20 @@ class AddFieldForm extends FormBase {
   }
 
   function buildForm(array $form, FormStateInterface $form_state) {
-    foreach (\Drupal::entityManager()->getFieldDefinitions('node', 'article') as $field_name => $field_definition) {
+    $parameters = \Drupal::routeMatch()->getParameters();
+    $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
+    foreach (\Drupal::entityManager()->getFieldDefinitions('node', $content_type) as $field_name => $field_definition) {
       if (!empty($field_definition->getTargetBundle())) {
         $bundleFields[$field_name] = $field_definition->getLabel().' ('.field_name.')';
       }
-    }
+    } 
+    $form['import_id'] = array(
+      '#type' => 'hidden',
+      '#value' => $parameters->get('id'),
+    );
     $form['source'] = array(
       '#type' => 'textfield',
-      '#title' => 'Name',
+      '#title' => 'Source',
     );
     $form['destination'] = array(
       '#type' => 'select',
@@ -38,20 +44,14 @@ class AddFieldForm extends FormBase {
   }
 
   function validateForm(array &$form, FormStateInterface $form_state) {
-    if (strlen($form_state->getValue('import_name')) < 3) {
-      $form_state->setErrorByName('import_name', $this->t('pleae enter the name atleast 3 charachter'));
+    if (empty($form_state->getValue('source'))) {
+      $form_state->setErrorByName('source', $this->t('Please Enter the Source'));
     }
   }
 
   function submitForm(array &$form, FormStateInterface $form_state) {
-    $image = $form_state->getValue('csv_file');
-    $file = File::load($image[0]);
-    $file_path = $file->getFileUri();
-    $file->setPermanent();
-    $file->save();
-    
-    CsvImportStorage::add($form_state->getValue('import_name'), $form_state->getValue('content_type_list'), $image[0], $file_path);
-    drupal_set_message(t($form_state->getValue('import_name') . ' added successfully'));
+    CsvImportStorage::addimporterfields($form_state->getValue('import_id'), $form_state->getValue('source'), $form_state->getValue('destination'));
+    drupal_set_message(t('fields Added successfully'));
     return;
   }
 

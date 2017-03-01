@@ -14,8 +14,13 @@ class CsvImportStorage {
   }
 
   static function getimporter_fields($id) {
-    $result = db_query('SELECT * FROM {csv_import_fields} WHERE id = :id', array(':id' => $id))->fetchAllAssoc('id');
+    $result = db_query('SELECT * FROM {csv_import_fields} WHERE importer_id = :id', array(':id' => $id))->fetchAllAssoc('id');
     return $result;
+  }
+
+  static function getcontent_type_name($id) {
+    $result = db_query('SELECT * FROM {csv_import} WHERE id = :id', array(':id' => $id))->fetchAllAssoc('id');
+    return $result[1]->content_type;
   }
 
   static function add($name, $message, $fid, $file_path) {
@@ -27,6 +32,14 @@ class CsvImportStorage {
     ))->execute();
   }
 
+  static function addimporterfields($importer_id, $source, $destination) {
+    db_insert('csv_import_fields')->fields(array(
+      'importer_id' => $importer_id,
+      'source' => $source,
+      'destination' => $destination,
+    ))->execute();
+  }
+ 
   static function delete($id) {
     db_delete('csv_import')->condition('id', $id)->execute();
   }

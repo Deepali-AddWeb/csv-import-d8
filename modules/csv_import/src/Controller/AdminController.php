@@ -50,6 +50,7 @@ class AdminController {
     );
     $rows = array();
     $parameters = \Drupal::routeMatch()->getParameters();
+    $result = CsvImportStorage::getimporter_fields($parameters->get('id'));
     foreach(CsvImportStorage::getimporter_fields($parameters->get('id')) as $id=>$content) {
       // Row with attributes on the row and some of its cells.
       $rows[] = array(
