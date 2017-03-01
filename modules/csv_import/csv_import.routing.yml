@@ -29,3 +29,19 @@ csv_importer_add_fields:
      _title: 'Add fields in Importer'
   requirements: 
     _permission: 'access content'
+
+csv_importer_delete_fields:
+  path: '/admin/config/csv_import/list/{id}/delete/{field_id}'
+  defaults:
+     _controller: '\Drupal\csv_import\Controller\AdminController::delete_importer_fields'
+     _title: 'delete fields in Importer'
+  requirements: 
+    _permission: 'access content'
+
+csv_importer_edit_fields:
+  path: '/admin/config/csv_import/list/{id}/edit/{field_id}'
+  defaults:
+     _form: '\Drupal\csv_import\Form\EditFieldForm'
+     _title: 'Edit field in Importer'
+  requirements: 
+    _permission: 'access content'

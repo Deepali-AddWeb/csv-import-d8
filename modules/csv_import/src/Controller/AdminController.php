@@ -3,6 +3,7 @@
 namespace Drupal\csv_import\Controller;
 use Drupal\csv_import\CsvImportStorage;
 Use Drupal\Core\Routing;
+use Drupal\Core\Routing\TrustedRedirectResponse;
 
 class AdminController {
   /**
@@ -67,5 +68,12 @@ class AdminController {
       ),
     );
     return $table;
+  }
+  public function delete_importer_fields() {
+    global $base_root;
+    global $base_path;
+    $parameters = \Drupal::routeMatch()->getParameters();
+    CsvImportStorage::deletefields($parameters->get('field_id'));
+     return new TrustedRedirectResponse($base_root.$base_path.'admin/config/csv_import/list/'.$parameters->get('id'));
   }
 }

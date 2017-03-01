@@ -17,5 +17,13 @@ function csv_import_menu() {
     'title' => 'Add fields in importer',
     'route' => 'csv_importer_add_fields',
   );
+  $items['/admin/config/csv_import/list/%/delete/%'] = array(
+    'title' => 'delete fields in importer',
+    'route' => 'csv_importer_delete_fields',
+  );
+  $items['/admin/config/csv_import/list/%/edit/%'] = array(
+    'title' => 'Edit field in importer',
+    'route' => 'csv_importer_edit_fields',
+  );
   return $items;
 }
