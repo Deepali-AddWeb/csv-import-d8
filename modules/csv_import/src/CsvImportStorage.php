@@ -13,6 +13,11 @@ class CsvImportStorage {
     return (bool) $result;
   }
 
+  static function getimporter_fields($id) {
+    $result = db_query('SELECT * FROM {csv_import_fields} WHERE id = :id', array(':id' => $id))->fetchAllAssoc('id');
+    return $result;
+  }
+
   static function add($name, $message, $fid, $file_path) {
     db_insert('csv_import')->fields(array(
       'name' => $name,

@@ -13,3 +13,19 @@ csv_import_add:
      _title: 'Create Importer'
   requirements: 
     _permission: 'access content'
+
+csv_import_list_fields:
+  path: '/admin/config/csv_import/list/{id}'
+  defaults:
+     _controller: '\Drupal\csv_import\Controller\AdminController::list_importer_fields'
+     _title: 'list fields Importer'
+  requirements: 
+    _permission: 'access content'
+
+csv_importer_add_fields:
+  path: '/admin/config/csv_import/list/{id}/add'
+  defaults:
+     _form: '\Drupal\csv_import\Form\AddFieldForm'
+     _title: 'Add fields in Importer'
+  requirements: 
+    _permission: 'access content'

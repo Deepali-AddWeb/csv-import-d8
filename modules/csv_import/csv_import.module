@@ -9,5 +9,13 @@ function csv_import_menu() {
     'title' => 'Add csv importer',
     'route' => 'csv_import_add',
   );
+  $items['/admin/config/csv_import/list/%'] = array(
+    'title' => 'List Mapping fields of CSV importer',
+    'route' => 'csv_import_list_fields',
+  );
+  $items['/admin/config/csv_import/list/%/add'] = array(
+    'title' => 'Add fields in importer',
+    'route' => 'csv_importer_add_fields',
+  );
   return $items;
 }

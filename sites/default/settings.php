@@ -754,7 +754,7 @@ $settings['file_scan_ignore_directories'] = [
 #   include $app_root . '/' . $site_path . '/settings.local.php';
 # }
 $databases['default']['default'] = array (
-  'database' => 'drupal_8_1',
+  'database' => 'csv_import',
   'username' => 'root',
   'password' => 'root',
   'prefix' => '',

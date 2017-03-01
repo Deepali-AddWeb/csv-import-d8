@@ -42,12 +42,12 @@ function csv_import_schema() {
         'length' => 40,
         'not null' => TRUE,
       ),
-      'field_machine_name'=>array(
+      'source'=>array(
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
       ),
-      'table_column_name'=>array(
+      'destination'=>array(
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,

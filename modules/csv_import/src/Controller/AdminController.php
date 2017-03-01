@@ -2,6 +2,7 @@
 
 namespace Drupal\csv_import\Controller;
 use Drupal\csv_import\CsvImportStorage;
+Use Drupal\Core\Routing;
 
 class AdminController {
   /**
@@ -37,6 +38,33 @@ class AdminController {
       ),
     );
 
+    return $table;
+  }
+
+  public function list_importer_fields() {
+    $header = array(
+      'id' => t('Id'),
+      'name' => t('Source'),
+      'content type' => t('Destination'),
+      'operations' => t('Action'),
+    );
+    $rows = array();
+    $parameters = \Drupal::routeMatch()->getParameters();
+    foreach(CsvImportStorage::getimporter_fields($parameters->get('id')) as $id=>$content) {
+      // Row with attributes on the row and some of its cells.
+      $rows[] = array(
+        'data' => array($id, $content->source ,$content->destination, 'Manage fields Import Delete')
+      );
+    }
+
+    $table = array(
+      '#type' => 'table',
+      '#header' => $header,
+      '#rows' => $rows,
+      '#attributes' => array(
+        'id' => 'bd-contact-table',
+      ),
+    );
     return $table;
   }
 }
