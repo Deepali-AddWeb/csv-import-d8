@@ -39,6 +39,7 @@ class AddForm extends FormBase {
        '#upload_location' => 'public://csv',
        '#required' => TRUE,
     ];
+
     $form['actions'] = array('#type' => 'actions');
     $form['actions']['submit'] = array(
       '#type' => 'submit',

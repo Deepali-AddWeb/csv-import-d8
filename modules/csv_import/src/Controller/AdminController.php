@@ -23,11 +23,13 @@ class AdminController {
       'operations' => t('Action'),
     );
     $rows = array();
+    $n = 1;
     foreach(CsvImportStorage::getAll() as $id=>$content) {
       // Row with attributes on the row and some of its cells.
       $rows[] = array(
-        'data' => array($id, $content->name, $content->content_type ,'Manage fields Import Delete')
+        'data' => array($n, $content->name, $content->content_type ,'Manage fields Import Delete')
       );
+      $n++;
     }
 
     $table = array(
@@ -43,6 +45,8 @@ class AdminController {
   }
 
   public function list_importer_fields() {
+    global $base_path;
+    global $base_root;
     $header = array(
       'id' => t('Id'),
       'name' => t('Source'),
@@ -52,11 +56,13 @@ class AdminController {
     $rows = array();
     $parameters = \Drupal::routeMatch()->getParameters();
     $result = CsvImportStorage::getimporter_fields($parameters->get('id'));
+    $n = 1;
     foreach(CsvImportStorage::getimporter_fields($parameters->get('id')) as $id=>$content) {
       // Row with attributes on the row and some of its cells.
       $rows[] = array(
-        'data' => array($id, $content->source ,$content->destination, 'Manage fields Import Delete')
+        'data' => array($n, $content->source ,$content->destination, t('<a href="'.$base_root.$base_path.'admin/config/csv_import/list/'.$content->importer_id.'/edit/'.$content->id.'">Edit</a> <a href="'.$base_root.$base_path.'admin/config/csv_import/list/'.$content->importer_id.'/delete/'.$content->id.'">Delete</a>'))
       );
+      $n++;
     }
 
     $table = array(

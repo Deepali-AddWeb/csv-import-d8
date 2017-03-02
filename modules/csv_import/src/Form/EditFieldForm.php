@@ -15,40 +15,33 @@ class EditFieldForm extends FormBase {
 
   function buildForm(array $form, FormStateInterface $form_state) {
     $parameters = \Drupal::routeMatch()->getParameters();
-   /* print('<pre style="color:red;">');
-    print_r($parameters->get('field_id'));
-    print('</pre>');
-    exit;
-    get('field_id');*/
-    $result = CsvImportStorage::get_field_label('2');
-    print('<pre style="color:red;">');
-    print_r($result);
-    print('</pre>');
-    exit;
+    $label = CsvImportStorage::get_field_label($parameters->get('field_id'));
     $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
     foreach (\Drupal::entityManager()->getFieldDefinitions('node', $content_type) as $field_name => $field_definition) {
       if (!empty($field_definition->getTargetBundle())) {
         $bundleFields[$field_name] = $field_definition->getLabel().' ('.field_name.')';
       }
     } 
-    $form['import_id'] = array(
+    $form['field_id'] = array(
       '#type' => 'hidden',
-      '#value' => $parameters->get('id'),
+      '#value' => $parameters->get('field_id'),
     );
     $form['source'] = array(
       '#type' => 'textfield',
       '#title' => 'Source',
+      '#default_value' => $label['source'],
     );
     $form['destination'] = array(
       '#type' => 'select',
       '#title' => 'Content type',
+      '#default_value' => $label['destination'],
       '#options' => $bundleFields,
     );
 
     $form['actions'] = array('#type' => 'actions');
     $form['actions']['submit'] = array(
       '#type' => 'submit',
-      '#value' => t('Add'),
+      '#value' => t('Update'),
     );
     return $form;
   }
@@ -60,8 +53,8 @@ class EditFieldForm extends FormBase {
   }
 
   function submitForm(array &$form, FormStateInterface $form_state) {
-    CsvImportStorage::addimporterfields($form_state->getValue('import_id'), $form_state->getValue('source'), $form_state->getValue('destination'));
-    drupal_set_message(t('fields Added successfully'));
+    CsvImportStorage::updateimporterfields($form_state->getValue('field_id'), $form_state->getValue('source'), $form_state->getValue('destination'));
+    drupal_set_message(t('field updated successfully'));
     return;
   }
 

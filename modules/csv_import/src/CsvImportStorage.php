@@ -24,7 +24,7 @@ class CsvImportStorage {
   }
 
   static function get_field_label($field_id) {
-    $result = db_query('SELECT * FROM {csv_import_fields} WHERE id = :id', array(':id' => $field_id))->fetchAllAssoc('id');
+    $result = db_query('SELECT * FROM {csv_import_fields} WHERE id = :id', array(':id' => $field_id))->fetchAssoc('source');
     return $result;
   }
 
@@ -43,6 +43,15 @@ class CsvImportStorage {
       'source' => $source,
       'destination' => $destination,
     ))->execute();
+  }
+
+  static function updateimporterfields($field_id, $source, $destination) {
+    db_update('csv_import_fields')->fields(array(
+      'source' => $source,
+      'destination' => $destination,
+    ))
+    ->condition('id', $field_id, '=')
+    -> execute();
   }
 
   static function deletefields($id) {
