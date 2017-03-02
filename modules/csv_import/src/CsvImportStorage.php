@@ -54,6 +54,10 @@ class CsvImportStorage {
     -> execute();
   }
 
+  static function deleteimporter($id) {
+    db_delete('csv_import')->condition('id', $id)->execute();
+  }
+
   static function deletefields($id) {
     db_delete('csv_import_fields')->condition('id', $id)->execute();
   }

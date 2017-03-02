@@ -45,3 +45,19 @@ csv_importer_edit_fields:
      _title: 'Edit field in Importer'
   requirements: 
     _permission: 'access content'
+
+csv_delete_importer:
+  path: '/admin/config/csv_import/delete/{id}'
+  defaults:
+     _controller: '\Drupal\csv_import\Controller\AdminController::delete_importer'
+     _title: 'Delete importer'
+  requirements: 
+    _permission: 'access content'
+
+import_content:
+  path: '/admin/config/csv_import/import'
+  defaults:
+     _controller: '\Drupal\csv_import\Controller\AdminController::import'
+     _title: 'import content'
+  requirements: 
+    _permission: 'access content'
