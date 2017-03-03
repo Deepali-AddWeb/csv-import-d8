@@ -17,17 +17,6 @@ function csv_import_schema() {
         'length' => 255,
         'not null' => TRUE,
       ),
-      'csv_file_fid'=>array(
-        'type' => 'int',
-        'length' => 255,
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-      'csv_file_location'=>array(
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-      ),
     ),
     'primary key' => array('id'),
   );

@@ -20,7 +20,7 @@ class CsvImportStorage {
 
   static function getcontent_type_name($id) {
     $result = db_query('SELECT * FROM {csv_import} WHERE id = :id', array(':id' => $id))->fetchAll();
-    return $result[0]->content_type;
+    return $result;
   }
 
   static function get_field_label($field_id) {
@@ -28,12 +28,10 @@ class CsvImportStorage {
     return $result;
   }
 
-  static function add($name, $message, $fid, $file_path) {
+  static function add($name, $content_type) {
     db_insert('csv_import')->fields(array(
       'name' => $name,
-      'content_type' => $message,
-      'csv_file_fid' => $fid,
-      'csv_file_location' => $file_path,
+      'content_type' => $content_type,
     ))->execute();
   }
 

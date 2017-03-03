@@ -29,17 +29,6 @@ class AddForm extends FormBase {
       '#options' => $contentTypesList,
     );
 
-    $form['csv_file'] = [
-       '#type' => 'managed_file',
-       '#title' => t('Import file'),
-       '#upload_validators' => array(
-           'file_validate_extensions' => array('gif png jpg jpeg'),
-           'file_validate_size' => array(25600000),
-       ),
-       '#upload_location' => 'public://csv',
-       '#required' => TRUE,
-    ];
-
     $form['actions'] = array('#type' => 'actions');
     $form['actions']['submit'] = array(
       '#type' => 'submit',
@@ -55,13 +44,7 @@ class AddForm extends FormBase {
   }
 
   function submitForm(array &$form, FormStateInterface $form_state) {
-    $image = $form_state->getValue('csv_file');
-    $file = File::load($image[0]);
-    $file_path = $file->getFileUri();
-    $file->setPermanent();
-    $file->save();
-    
-    CsvImportStorage::add($form_state->getValue('import_name'), $form_state->getValue('content_type_list'), $image[0], $file_path);
+    CsvImportStorage::add($form_state->getValue('import_name'), $form_state->getValue('content_type_list'));
     drupal_set_message(t($form_state->getValue('import_name') . ' added successfully'));
     return;
   }

@@ -58,6 +58,6 @@ import_content:
   path: '/admin/config/csv_import/import/{id}'
   defaults:
      _form: '\Drupal\csv_import\Form\ImportForm'
-     _title: 'import content'
+     _title: 'Import content'
   requirements: 
     _permission: 'access content'
