@@ -55,9 +55,9 @@ csv_delete_importer:
     _permission: 'access content'
 
 import_content:
-  path: '/admin/config/csv_import/import'
+  path: '/admin/config/csv_import/import/{id}'
   defaults:
-     _controller: '\Drupal\csv_import\Controller\AdminController::import'
+     _form: '\Drupal\csv_import\Form\ImportForm'
      _title: 'import content'
   requirements: 
     _permission: 'access content'

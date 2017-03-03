@@ -19,8 +19,8 @@ class CsvImportStorage {
   }
 
   static function getcontent_type_name($id) {
-    $result = db_query('SELECT * FROM {csv_import} WHERE id = :id', array(':id' => $id))->fetchAllAssoc('id');
-    return $result[1]->content_type;
+    $result = db_query('SELECT * FROM {csv_import} WHERE id = :id', array(':id' => $id))->fetchAll();
+    return $result[0]->content_type;
   }
 
   static function get_field_label($field_id) {

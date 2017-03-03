@@ -98,23 +98,43 @@ class AdminController {
   }
 
   public function import() {
-/*    global $base_root;
-    global $base_path;
+    $result = db_query('SELECT source,destination FROM {csv_import_fields} WHERE importer_id = :id', array(':id' => $id))->fetchAll();
+
+    $array_key_val_pair = array();
+
+    foreach ($result as $key => $key_val_pair) {
+      $array_key_val_pair[trim($key_val_pair->source)] = trim($key_val_pair->destination);
+    }
     $file = fopen($base_root.$base_path.'sites/default/files/test.csv','r');
+
+    $int_row_count = 0;
+    $array_import_pair = array();
+
     while (($line = fgetcsv($file)) !== FALSE) {
-      $node = Node::create(array(
-        'type' => 'article',
-        'title' => 'title 1',
-        'body' => 'test body description'
-      ));
-      $node->save();
-      print('<pre style="color:red;">');
-      print_r($line);
-      print('</pre>');
-      exit;
+
+      if ($int_row_count == 0) {
+        foreach ($line as $first_line_key => $first_line_value) {
+          $array_import_pair[$first_line_key] = $array_key_val_pair[$first_line_value];
+        }
+      }
+      else {
+
+        $array_node_import = array('type' => 'article');
+        
+        foreach ($array_import_pair as $key => $value) {
+          $array_node_import[$value] = $line[$key];
+        }
+
+        $node = Node::create(
+          $array_node_import
+        );
+        $node->save();
+      }
+
+      $int_row_count++;
     }
     fclose($file);
-   */
+   
     return array(
       '#type' => 'markup',
       '#markup' => t('Hello world'),

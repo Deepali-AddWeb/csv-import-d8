@@ -29,7 +29,7 @@ function csv_import_menu() {
     'title' => 'Delete importer',
     'route' => 'csv_delete_importer',
   );
-  $items['/admin/config/csv_import/import'] = array(
+  $items['/admin/config/csv_import/import/%'] = array(
     'title' => 'Import content',
     'route' => 'import_content',
   );

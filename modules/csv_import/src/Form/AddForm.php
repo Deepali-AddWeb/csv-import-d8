@@ -5,7 +5,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity;
 use Drupal\csv_import\CsvImportStorage;
-use \Drupal\file\Entity\File;
+use Drupal\file\Entity\File;
 use Drupal\Core\Url;
 
 class AddForm extends FormBase {
