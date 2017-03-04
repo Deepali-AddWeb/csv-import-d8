@@ -18,7 +18,7 @@ class ImportForm extends FormBase {
 
     $parameters = \Drupal::routeMatch()->getParameters();
     $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
-   
+    $content_type = $content_type[0]->content_type;
     $form['content_name'] = array(
       '#type' => 'markup',
       '#markup' => t('<h1>Import to "<i>'.$content_type.'</i>" content type</h2>'),
@@ -55,6 +55,7 @@ class ImportForm extends FormBase {
   function submitForm(array &$form, FormStateInterface $form_state) {
     $parameters = \Drupal::routeMatch()->getParameters();
     $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
+    $content_type = $content_type[0]->content_type;
     $image = $form_state->getValue('csv_file');
     $file = File::load($image[0]);
     $file_path = $file->getFileUri();
@@ -76,6 +77,7 @@ class ImportForm extends FormBase {
 
     while (($line = fgetcsv($file)) !== FALSE) {
       if ($int_row_count == 0) {
+      
         foreach ($line as $first_line_key => $first_line_value) {
           $array_import_pair[$first_line_key] = $array_key_val_pair[$first_line_value];
         }
@@ -91,7 +93,7 @@ class ImportForm extends FormBase {
         $node = Node::create(
           $array_node_import
         );
-
+        $node->save();
       }
 
       $int_row_count++;
