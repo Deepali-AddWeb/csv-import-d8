@@ -12,9 +12,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AdminController {
   public function content() {
-    $add_link = array('<p><a href= "add new import">add new import</a></p>');
-    // Table header
-    $header = array(
+
+   $header = array(
       'id' => t('Id'),
       'name' => t('Name'),
       'content type' => t('Content Type'),
@@ -24,11 +23,26 @@ class AdminController {
     $n = 1;
     foreach(CsvImportStorage::getAll() as $id=>$content) {
       // Row with attributes on the row and some of its cells.
-      $map_fields = \Drupal::l(t('Map Fields'), Url::fromUri('internal:/admin/config/csv_import/list/'.$content->id));
-      $delete = \Drupal::l(t('Delete'), Url::fromUri('internal:/admin/config/csv_import/delete/'.$content->id));
-      $import = \Drupal::l(t('Import'), Url::fromUri('internal:/admin/config/csv_import/import/'.$content->id));
+     
+      $actions = array(
+        '#type' => 'dropbutton',
+        '#links' => array(
+          'simple_form' => array(
+            'title' => 'Map Fields',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->id),
+          ),
+          'demo' => array(
+            'title' => 'Delete',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/delete/'.$content->id),
+          ),
+          'Import' => array(
+            'title' => 'Import',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/import/'.$content->id),
+          ),
+        ),
+      );
       $rows[] = array(
-        'data' => array($n, $content->name, $content->content_type ,t($map_fields.' '.$import.' '.$delete))
+        'data' => array($n, $content->name, $content->content_type ,drupal_render($actions))
       );
       $n++;
     }
@@ -59,11 +73,23 @@ class AdminController {
     $result = CsvImportStorage::getimporter_fields($parameters->get('id'));
     $n = 1;
     foreach(CsvImportStorage::getimporter_fields($parameters->get('id')) as $id=>$content) {
-      $edit = \Drupal::l(t('Edit'), Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/edit/'.$content->id));
-      $delete = \Drupal::l(t('Delete'), Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/delete/'.$content->id));
-      // Row with attributes on the row and some of its cells.
+
+      $actions = array(
+        '#type' => 'dropbutton',
+        '#links' => array(
+          'Edit' => array(
+            'title' => 'Edit',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/edit/'.$content->id),
+          ),
+          'Delete' => array(
+            'title' => 'Delete',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/delete/'.$content->id),
+          ),
+        ),
+      );
+     // Row with attributes on the row and some of its cells.
       $rows[] = array(
-        'data' => array($n, $content->source ,$content->destination, t($edit.' '.$delete))
+        'data' => array($n, $content->source ,$content->destination,drupal_render($actions))
       );
       $n++;
     }
@@ -91,7 +117,7 @@ class AdminController {
     $parameters = \Drupal::routeMatch()->getParameters();
     db_delete('csv_import')->condition('id', $parameters->get('id'))->execute();
     db_delete('csv_import_fields')->condition('importer_id', $parameters->get('id'))->execute();
-    return new RedirectResponse(\Drupal::url('csv_import'));
+    return new RedirectResponse(\Drupal::url('csv_import_root'));
   }
 
 }

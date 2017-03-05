@@ -1,0 +1,11 @@
+csv_import.link_add:
+  route_name: csv_import_add
+  title: 'Add Importer'
+  appears_on:
+    - csv_import_root
+
+csv_import.field_link_add:
+  route_name: csv_importer_add_fields
+  title: 'Add Field'
+  appears_on:
+    - csv_import_list_fields

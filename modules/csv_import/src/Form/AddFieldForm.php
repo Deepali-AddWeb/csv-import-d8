@@ -20,7 +20,7 @@ class AddFieldForm extends FormBase {
     $bundleFields['title'] = 'Title';
     foreach (\Drupal::entityManager()->getFieldDefinitions('node', $content_type) as $field_name => $field_definition) {
       if (!empty($field_definition->getTargetBundle())) {
-        $bundleFields[$field_name] = $field_definition->getLabel().' ('.field_name.')';
+        $bundleFields[$field_name] = $field_definition->getLabel().' ('.$field_name.')';
       }
     } 
     $form['import_id'] = array(
