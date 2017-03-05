@@ -1,5 +1,5 @@
 csv_import.admin:
-   title: 'csv import'
-   description: 'Hello page'
+   title: 'Import CSV'
+   description: 'Create node using CSV'
    parent: system.admin_config_development
    route_name: csv_import_root

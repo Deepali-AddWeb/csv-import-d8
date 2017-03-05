@@ -8,16 +8,10 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\file\Entity\File;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AdminController {
-  /**
-   * Returns a simple page.
-   *
-   * @return array
-   *   A simple renderable array.
-   */
   public function content() {
-
     $add_link = array('<p><a href= "add new import">add new import</a></p>');
     // Table header
     $header = array(
@@ -97,7 +91,7 @@ class AdminController {
     $parameters = \Drupal::routeMatch()->getParameters();
     db_delete('csv_import')->condition('id', $parameters->get('id'))->execute();
     db_delete('csv_import_fields')->condition('importer_id', $parameters->get('id'))->execute();
-    return new TrustedRedirectResponse('example');
+    return new RedirectResponse(\Drupal::url('csv_import'));
   }
 
 }

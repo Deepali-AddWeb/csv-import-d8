@@ -3,7 +3,7 @@ csv_import_root:
   defaults:
     _controller: '\Drupal\csv_import\Controller\AdminController::content'
     _title: 'Node Import Using CSV'
-  requirements: 
+  requirements:
     _permission: 'access content'
 
 csv_import_add:
@@ -11,7 +11,7 @@ csv_import_add:
   defaults:
      _form: '\Drupal\csv_import\Form\AddForm'
      _title: 'Create Importer'
-  requirements: 
+  requirements:
     _permission: 'access content'
 
 csv_import_list_fields:
@@ -19,7 +19,7 @@ csv_import_list_fields:
   defaults:
      _controller: '\Drupal\csv_import\Controller\AdminController::list_importer_fields'
      _title: 'list fields Importer'
-  requirements: 
+  requirements:
     _permission: 'access content'
 
 csv_importer_add_fields:
