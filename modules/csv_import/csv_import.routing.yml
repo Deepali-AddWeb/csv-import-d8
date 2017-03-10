@@ -14,11 +14,27 @@ csv_import_add:
   requirements:
     _permission: 'access content'
 
+edit_importer:
+  path: '/admin/config/csv_import/edit/{id}'
+  defaults:
+     _form: '\Drupal\csv_import\Form\EditImporter'
+     _title: 'Edit importer'
+  requirements: 
+    _permission: 'access content'
+
+import_content:
+  path: '/admin/config/csv_import/import/{id}'
+  defaults:
+     _form: '\Drupal\csv_import\Form\ImportForm'
+     _title: 'Import content'
+  requirements: 
+    _permission: 'access content'
+
 csv_import_list_fields:
   path: '/admin/config/csv_import/list/{id}'
   defaults:
      _controller: '\Drupal\csv_import\Controller\AdminController::list_importer_fields'
-     _title: 'list fields Importer'
+     _title: 'Fields Importer'
   requirements:
     _permission: 'access content'
 
@@ -54,10 +70,4 @@ csv_delete_importer:
   requirements: 
     _permission: 'access content'
 
-import_content:
-  path: '/admin/config/csv_import/import/{id}'
-  defaults:
-     _form: '\Drupal\csv_import\Form\ImportForm'
-     _title: 'Import content'
-  requirements: 
-    _permission: 'access content'
+

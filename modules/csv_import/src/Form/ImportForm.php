@@ -2,12 +2,13 @@
 
 namespace Drupal\csv_import\Form;
 use Drupal\Core\Form\FormBase;
+use Drupal\Core\Field;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity;
 use Drupal\csv_import\CsvImportStorage;
-use Drupal\file\Entity\File;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
+use Drupal\file\Entity\File;
 
 class ImportForm extends FormBase {
   public function getFormID() {
@@ -15,7 +16,48 @@ class ImportForm extends FormBase {
   }
 
   function buildForm(array $form, FormStateInterface $form_state) {
-
+    
+    $file_path = "public://csv/test.csv";
+    $file_uri = file_create_url($file_path);
+    $file = fopen($file_uri,'r');
+    $int_row_count = 0;
+    $id = '1';
+    $result = db_query('SELECT source,destination FROM {csv_import_fields} WHERE importer_id = :id', array(':id' => $id))->fetchAll();
+    $array_key_val_pair = array();
+    foreach ($result as $key => $key_val_pair) {
+      $array_key_val_pair[trim($key_val_pair->source)] = trim($key_val_pair->destination);
+    }
+    while (($line = fgetcsv($file)) !== FALSE) {
+      if ($int_row_count == 0) {
+        foreach ($line as $first_line_key => $first_line_value) {
+          $array_import_pair[$first_line_key] = $array_key_val_pair[$first_line_value];
+        }
+      }
+      else {
+        $array_node_import = array();
+        $array_node_import = array('type' => 'article');
+        foreach ($array_import_pair as $key => $value) {
+          $array_node_import[$value] = explode(',', $line[$key]);
+          $field_type = CsvImportStorage::get_field_type('article',$value);
+          if($field_type == 'image' && !empty(basename($line[$key])) ) {
+            $file_destination_path = 'public://' . basename($line[$key]);
+            $file_data = file_get_contents($line[$key]);
+            $row_file = file_save_data($file_data, $file_destination_path, FILE_EXISTS_REPLACE);
+            $array_image_value = array(
+              'target_id' => $row_file->id(),
+              'alt' => 'My alt',
+              'title' => 'My Title'
+            );
+            $array_node_import[$value] = $array_image_value;
+          }
+        }
+        $node = Node::create(
+          $array_node_import
+        );
+        $node->save();
+      }
+      $int_row_count++;
+    }
     $parameters = \Drupal::routeMatch()->getParameters();
     $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
     $content_type = $content_type[0]->content_type;
@@ -49,7 +91,6 @@ class ImportForm extends FormBase {
   }
 
   function validateForm(array &$form, FormStateInterface $form_state) {
-    
   }
 
   function submitForm(array &$form, FormStateInterface $form_state) {
@@ -71,36 +112,56 @@ class ImportForm extends FormBase {
     }
     $file_uri = file_create_url($file_path);
     $file = fopen($file_uri,'r');
-
     $int_row_count = 0;
-    $array_import_pair = array();
+    
 
     while (($line = fgetcsv($file)) !== FALSE) {
-      if ($int_row_count == 0) {
       
+
+      if ($int_row_count == 0) {
+       
         foreach ($line as $first_line_key => $first_line_value) {
           $array_import_pair[$first_line_key] = $array_key_val_pair[$first_line_value];
         }
+
       }
       else {
-
+        $array_node_import = array();
         $array_node_import = array('type' => $content_type);
-        
-        foreach ($array_import_pair as $key => $value) {
-          $array_node_import[$value] = $line[$key];
-        }
 
-        $node = Node::create(
+
+        foreach ($array_import_pair as $key => $value) {
+          $array_node_import[$value] = explode(',',$line[$key]);
+
+          if ($value == 'field_image') {
+            $data = file_get_contents($line[$key]);
+            $file1 = file_save_data($data, 'public://page/'.basename($line[$key]), FILE_EXISTS_REPLACE);
+            $array_node_import['field_image'] = array('target_id' => $file1->id(),'alt' => "My alt", 'title' => "My Title");
+         }
+
+       }
+
+       print('array_node_import::<pre style="color:red;">');
+       print_r($array_node_import);
+       print('</pre>');
+
+      
+       //exit;
+       $node = Node::create(
           $array_node_import
         );
         $node->save();
       }
 
+      print('int_row_count::<pre style="color:red;">');
+      print_r($int_row_count);
+      print('</pre>');
       $int_row_count++;
+      
     }
     fclose($file);
+    exit;
     drupal_set_message(($int_row_count-1).' Node Imported  successfully');
-
   }
-
+ 
 }

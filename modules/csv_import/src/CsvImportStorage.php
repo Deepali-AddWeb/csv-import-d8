@@ -1,16 +1,21 @@
 <?php
 
 namespace Drupal\csv_import;
+use Drupal\Core\Field;
+use Drupal\Core\Entity;
+
 class CsvImportStorage {
+  static function get_field_type($node_type, $field_machinename) {
+    foreach (\Drupal::entityManager()->getFieldDefinitions('node', $node_type) as $field_name => $field_definition) {
+        if($field_machinename == $field_name) {
+          return $field_definition->getType();
+        }
+    }
+  }
 
   static function getAll() {
     $result = db_query('SELECT * FROM {csv_import}')->fetchAllAssoc('id');
     return $result;
-  }
-
-  static function exists($id) {
-    $result = db_query('SELECT 1 FROM {csv_import} WHERE id = :id', array(':id' => $id))->fetchField();
-    return (bool) $result;
   }
 
   static function getimporter_fields($id) {

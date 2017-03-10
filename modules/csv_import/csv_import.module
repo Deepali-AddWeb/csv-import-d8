@@ -33,5 +33,9 @@ function csv_import_menu() {
     'title' => 'Import content',
     'route' => 'import_content',
   );
+  $items['/admin/config/csv_import/edit/%'] = array(
+    'title' => 'Edit content',
+    'route' => 'edit_importer',
+  );
   return $items;
 }

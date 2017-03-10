@@ -45,7 +45,7 @@ class EditFieldForm extends FormBase {
     $form['actions'] = array('#type' => 'actions');
     $form['actions']['submit'] = array(
       '#type' => 'submit',
-      '#value' => t('Update'),
+      '#value' => t('Update Field'),
     );
     return $form;
   }

@@ -40,7 +40,7 @@ class AddFieldForm extends FormBase {
     $form['actions'] = array('#type' => 'actions');
     $form['actions']['submit'] = array(
       '#type' => 'submit',
-      '#value' => t('Add'),
+      '#value' => t('Add Field'),
     );
     return $form;
   }

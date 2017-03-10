@@ -1,0 +1,19 @@
+csv_edit_import_tab:
+  route_name: edit_importer
+  title: Edit
+  base_route: csv_import_list_fields
+  weight: 10
+
+csv_import_map_tab:
+  route_name : csv_import_list_fields
+  title: Map fields
+  base_route: csv_import_list_fields
+  weight: 20
+
+csv_import_content_tab:
+  route_name: import_content
+  title: Import
+  base_route: csv_import_list_fields
+  weight: 30
+
+
