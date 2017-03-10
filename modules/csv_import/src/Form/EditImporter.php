@@ -15,7 +15,8 @@ class EditImporter extends FormBase {
   }
 
   function buildForm(array $form, FormStateInterface $form_state) {
-    $result = CsvImportStorage::getcontent_type_name('1');
+    $result = CsvImportStorage::getcontent_type_name('3');
+   
     $contentTypes = \Drupal::service('entity.manager')->getStorage('node_type')->loadMultiple();
     $contentTypesList = [];
     foreach ($contentTypes as $contentType) {
@@ -24,6 +25,7 @@ class EditImporter extends FormBase {
     $form['import_name'] = array(
       '#type' => 'textfield',
       '#title' => 'Name',
+      '#default_value' => $result[0]->name,
     );
     $form['content_type_list'] = array(
       '#type' => 'select',
@@ -43,13 +45,14 @@ class EditImporter extends FormBase {
 
   function validateForm(array &$form, FormStateInterface $form_state) {
     if (strlen($form_state->getValue('import_name')) < 3) {
-      $form_state->setErrorByName('import_name', $this->t('pleae enter the name atleast 3 charachter'));
+      $form_state->setErrorByName('import_name', $this->t('please enter the name atleast 3 charachter'));
     }
   }
 
   function submitForm(array &$form, FormStateInterface $form_state) {
-    CsvImportStorage::add($form_state->getValue('import_name'), $form_state->getValue('content_type_list'));
-    drupal_set_message(t($form_state->getValue('import_name') . ' added successfully'));
+    $parameters = \Drupal::routeMatch()->getParameters();
+    CsvImportStorage::update_importer($form_state->getValue('import_name'), $parameters->get('id'));
+    drupal_set_message(t($form_state->getValue('import_name') . ' Importer updated successfully'));
     return;
   }
 

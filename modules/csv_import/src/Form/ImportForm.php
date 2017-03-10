@@ -16,12 +16,38 @@ class ImportForm extends FormBase {
   }
 
   function buildForm(array $form, FormStateInterface $form_state) {
+    /*$file_data = file_get_contents('http://localhost/csv-import-d8/sites/default/files/test1.jpg');
+    $row_file = file_save_data($file_data, 'public://mytest1.jpg', FILE_EXISTS_REPLACE);
+
+    $file_data1 = file_get_contents('http://localhost/csv-import-d8/sites/default/files/test2.jpg');
+    $row_file1 = file_save_data($file_data1, 'public://test2.jpg', FILE_EXISTS_REPLACE);
+
+    $array_node_import = array(
+      "type" => 'article',
+      "title" => "hello new",
+      "field_image" => array(
+            array(
+              'target_id' => $row_file->id(),
+              'alt' => 'first alt',
+              'title' => 'first Title',
+            ),
+            array('target_id' => $row_file1->id(),
+              'alt' => 'second alt',
+              'title' => 'second Title',
+            )
+         ),
+    );
     
+    $node = Node::create(
+          $array_node_import
+        );
+    $node->save();
+    exit;*/
     $file_path = "public://csv/test.csv";
     $file_uri = file_create_url($file_path);
     $file = fopen($file_uri,'r');
     $int_row_count = 0;
-    $id = '1';
+    $id = '3';
     $result = db_query('SELECT source,destination FROM {csv_import_fields} WHERE importer_id = :id', array(':id' => $id))->fetchAll();
     $array_key_val_pair = array();
     foreach ($result as $key => $key_val_pair) {
@@ -36,21 +62,32 @@ class ImportForm extends FormBase {
       else {
         $array_node_import = array();
         $array_node_import = array('type' => 'article');
+        
         foreach ($array_import_pair as $key => $value) {
+
           $array_node_import[$value] = explode(',', $line[$key]);
           $field_type = CsvImportStorage::get_field_type('article',$value);
-          if($field_type == 'image' && !empty(basename($line[$key])) ) {
-            $file_destination_path = 'public://' . basename($line[$key]);
-            $file_data = file_get_contents($line[$key]);
-            $row_file = file_save_data($file_data, $file_destination_path, FILE_EXISTS_REPLACE);
-            $array_image_value = array(
-              'target_id' => $row_file->id(),
-              'alt' => 'My alt',
-              'title' => 'My Title'
-            );
-            $array_node_import[$value] = $array_image_value;
+         
+          if ($field_type == 'image') {
+            $array_image_value = array();
+            foreach($array_node_import[$value] as $key1 => $value1) {
+              $file_destination_path = 'public://page/' . basename($value1);
+              $file_data = file_get_contents($value);
+              $row_file = file_save_data($file_data, $file_destination_path, FILE_EXISTS_REPLACE);
+              $array_image_value[] = array(
+                'target_id' => $row_file->id(),
+                'alt' => 'My alt',
+                'title' => 'My Title'
+              );
+              
+              $array_node_import[$value] = $array_image_value;
+            }
           }
         }
+        print('<pre style="color:red;">');
+        print_r($array_node_import);
+        print('</pre>');
+        //exit;
         $node = Node::create(
           $array_node_import
         );

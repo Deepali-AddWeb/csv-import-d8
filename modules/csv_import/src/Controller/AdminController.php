@@ -27,17 +27,21 @@ class AdminController {
       $actions = array(
         '#type' => 'dropbutton',
         '#links' => array(
-          'simple_form' => array(
+          'map fields' => array(
             'title' => 'Map Fields',
             'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->id),
           ),
-          'demo' => array(
-            'title' => 'Delete',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/delete/'.$content->id),
+          'edit' => array(
+            'title' => 'Edit',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/edit/'.$content->id),
           ),
           'Import' => array(
             'title' => 'Import',
             'url' => Url::fromUri('internal:/admin/config/csv_import/import/'.$content->id),
+          ),
+          'delete' => array(
+            'title' => 'Delete',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/delete/'.$content->id),
           ),
         ),
       );
