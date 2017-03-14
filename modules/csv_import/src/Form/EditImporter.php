@@ -15,7 +15,8 @@ class EditImporter extends FormBase {
   }
 
   function buildForm(array $form, FormStateInterface $form_state) {
-    $result = CsvImportStorage::getcontent_type_name('3');
+    $parameters = \Drupal::routeMatch()->getParameters();
+    $result = CsvImportStorage::getcontent_type_name($parameters->get('id'));
     $contentTypes = \Drupal::service('entity.manager')->getStorage('node_type')->loadMultiple();
     $contentTypesList = [];
     foreach ($contentTypes as $contentType) {

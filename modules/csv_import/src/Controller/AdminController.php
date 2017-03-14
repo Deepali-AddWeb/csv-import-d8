@@ -11,6 +11,7 @@ use Drupal\file\Entity\File;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AdminController {
+  
   public function content() {
 
    $header = array(
@@ -25,8 +26,6 @@ class AdminController {
     
     foreach(CsvImportStorage::getAll() as $id=>$content) {
     
-      // Row with attributes on the row and some of its cells.
-     
       $actions = array(
         '#type' => 'dropbutton',
         '#links' => array(
@@ -126,6 +125,60 @@ class AdminController {
     db_delete('csv_import')->condition('id', $parameters->get('id'))->execute();
     db_delete('csv_import_fields')->condition('importer_id', $parameters->get('id'))->execute();
     return new RedirectResponse(\Drupal::url('csv_import_root'));
+  }
+
+  public function field_processor() {
+
+   $header = array(
+      'id' => t('Id'),
+      'name' => t('Name'),
+      'machine name' => t('Machine name'),
+      'content type' => t('Content Type'),
+      'operations' => t('Action'),
+    );
+    $rows = array();
+    $n = 1;
+    
+    foreach(CsvImportStorage::getAll() as $id=>$content) {
+    
+      $actions = array(
+        '#type' => 'dropbutton',
+        '#links' => array(
+          'map fields' => array(
+            'title' => 'Map Fields',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->id),
+          ),
+          'edit' => array(
+            'title' => 'Edit',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/edit/'.$content->id),
+          ),
+          'Import' => array(
+            'title' => 'Import',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/import/'.$content->id),
+          ),
+          'delete' => array(
+            'title' => 'Delete',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/delete/'.$content->id),
+          ),
+        ),
+      );
+      $rows[] = array(
+        'data' => array($n, $content->name, $content->machine_name, $content->content_type ,drupal_render($actions))
+      );
+      $n++;
+    }
+
+    $table = array(
+      '#type' => 'table',
+      '#header' => $header,
+      '#rows' => $rows,
+      '#attributes' => array(
+        'id' => 'bd-contact-table',
+      ),
+      '#empty' => 'No importer added yet'
+    );
+
+    return $table;
   }
 
 }

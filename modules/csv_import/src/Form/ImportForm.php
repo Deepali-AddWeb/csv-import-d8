@@ -16,29 +16,31 @@ class ImportForm extends FormBase {
   }
 
   function buildForm(array $form, FormStateInterface $form_state) {
-    $file_path = "public://csv/test.csv";
+    $file_path = "public://test.csv";
     $file_uri = file_create_url($file_path);
     $file = fopen($file_uri,'r');
     $int_row_count = 0;
-    $id = '3';
+    $id = '1';
     $result = db_query('SELECT source,destination FROM {csv_import_fields} WHERE importer_id = :id', array(':id' => $id))->fetchAll();
     $array_key_val_pair = array();
+    
     foreach ($result as $key => $key_val_pair) {
       $array_key_val_pair[trim($key_val_pair->source)] = trim($key_val_pair->destination);
     }
+   
     while (($line = fgetcsv($file)) !== FALSE) {
       if ($int_row_count == 0) {
         foreach ($line as $first_line_key => $first_line_value) {
-          $array_import_pair[$first_line_key] = $array_key_val_pair[$first_line_value];
+          if (array_key_exists($first_line_value, $array_key_val_pair)) {
+            $array_import_pair[$first_line_key] = $array_key_val_pair[$first_line_value];
+          }
         }
       }
       else {
         $array_node_import = array();
         $array_node_import = array('type' => 'article');
         foreach ($array_import_pair as $key => $value) {
-
           $array_node_import[$value] = explode(',', $line[$key]);
-          
           $field_type = CsvImportStorage::get_field_type('article',$value);
          
           if ($field_type == 'image') {
@@ -53,18 +55,18 @@ class ImportForm extends FormBase {
                 'alt' => 'My alt',
                 'title' => 'My Title'
               );
-              
               $array_node_import[$value] = $array_image_value;
             }
           }
         }
+       
+        $node = Node::create(
+          $array_node_import
+        );
         print('<pre style="color:red;">');
         print_r($array_node_import);
         print('</pre>');
         exit;
-        $node = Node::create(
-          $array_node_import
-        );
         $node->save();
       }
       $int_row_count++;

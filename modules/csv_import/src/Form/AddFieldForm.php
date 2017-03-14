@@ -58,5 +58,4 @@ class AddFieldForm extends FormBase {
     drupal_set_message(t($form_state->getValue('source').' ('.$form_state->getValue('destination').') field Added successfully'));
     return;
   }
-
 }

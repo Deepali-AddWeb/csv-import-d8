@@ -16,4 +16,10 @@ csv_import_content_tab:
   base_route: csv_import_list_fields
   weight: 30
 
+csv_import_field_process_tab:
+  route_name: csv_field_processor
+  title: Field Processor
+  base_route: csv_import_list_fields
+  weight: 40
+
 
