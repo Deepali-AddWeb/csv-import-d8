@@ -16,12 +16,15 @@ class AdminController {
    $header = array(
       'id' => t('Id'),
       'name' => t('Name'),
+      'machine name' => t('Machine name'),
       'content type' => t('Content Type'),
       'operations' => t('Action'),
     );
     $rows = array();
     $n = 1;
+    
     foreach(CsvImportStorage::getAll() as $id=>$content) {
+    
       // Row with attributes on the row and some of its cells.
      
       $actions = array(
@@ -46,7 +49,7 @@ class AdminController {
         ),
       );
       $rows[] = array(
-        'data' => array($n, $content->name, $content->content_type ,drupal_render($actions))
+        'data' => array($n, $content->name, $content->machine_name, $content->content_type ,drupal_render($actions))
       );
       $n++;
     }
@@ -58,6 +61,7 @@ class AdminController {
       '#attributes' => array(
         'id' => 'bd-contact-table',
       ),
+      '#empty' => 'No importer added yet'
     );
 
     return $table;
@@ -76,8 +80,8 @@ class AdminController {
     $parameters = \Drupal::routeMatch()->getParameters();
     $result = CsvImportStorage::getimporter_fields($parameters->get('id'));
     $n = 1;
+  
     foreach(CsvImportStorage::getimporter_fields($parameters->get('id')) as $id=>$content) {
-
       $actions = array(
         '#type' => 'dropbutton',
         '#links' => array(
@@ -88,10 +92,9 @@ class AdminController {
           'Delete' => array(
             'title' => 'Delete',
             'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/delete/'.$content->id),
-          ),
+           ),
         ),
       );
-     // Row with attributes on the row and some of its cells.
       $rows[] = array(
         'data' => array($n, $content->source ,$content->destination,drupal_render($actions))
       );
@@ -105,6 +108,7 @@ class AdminController {
       '#attributes' => array(
         'id' => 'bd-contact-table',
       ),
+      '#empty' => 'No fields added yet'
     );
     return $table;
   }

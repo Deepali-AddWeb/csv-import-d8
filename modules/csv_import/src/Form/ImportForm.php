@@ -38,6 +38,7 @@ class ImportForm extends FormBase {
         foreach ($array_import_pair as $key => $value) {
 
           $array_node_import[$value] = explode(',', $line[$key]);
+          
           $field_type = CsvImportStorage::get_field_type('article',$value);
          
           if ($field_type == 'image') {
@@ -60,7 +61,7 @@ class ImportForm extends FormBase {
         print('<pre style="color:red;">');
         print_r($array_node_import);
         print('</pre>');
-        //exit;
+        exit;
         $node = Node::create(
           $array_node_import
         );

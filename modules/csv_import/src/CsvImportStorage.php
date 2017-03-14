@@ -18,6 +18,11 @@ class CsvImportStorage {
     return $result;
   }
 
+  static function exists_importer($machine_name) {
+    $result = db_query('SELECT * FROM {csv_import} WHERE machine_name = :machine_name', array(':machine_name' => $machine_name))->fetchAll();
+    return $result;
+  }
+
   static function getimporter_fields($id) {
     $result = db_query('SELECT * FROM {csv_import_fields} WHERE importer_id = :id', array(':id' => $id))->fetchAllAssoc('id');
     return $result;
@@ -33,10 +38,11 @@ class CsvImportStorage {
     return $result;
   }
 
-  static function add($name, $content_type) {
+  static function add($name, $content_type , $machine_name) {
     db_insert('csv_import')->fields(array(
       'name' => $name,
       'content_type' => $content_type,
+      'machine_name' => $machine_name,
     ))->execute();
   }
 

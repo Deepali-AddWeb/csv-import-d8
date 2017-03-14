@@ -9,7 +9,7 @@ csv_import_root:
 csv_import_add:
   path: '/admin/config/csv_import/add'
   defaults:
-     _form: '\Drupal\csv_import\Form\AddForm'
+     _form: '\Drupal\csv_import\Form\AddImporter'
      _title: 'Create Importer'
   requirements:
     _permission: 'access content'

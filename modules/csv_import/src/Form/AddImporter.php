@@ -7,8 +7,9 @@ use Drupal\Core\Entity;
 use Drupal\csv_import\CsvImportStorage;
 use Drupal\file\Entity\File;
 use Drupal\Core\Url;
+use Drupal\Core\Entity\EntityTypeInterface;
 
-class AddForm extends FormBase {
+class AddImporter extends FormBase {
   public function getFormID() {
     return 'csv_import.csv_import_add';
   }
@@ -22,7 +23,15 @@ class AddForm extends FormBase {
     $form['import_name'] = array(
       '#type' => 'textfield',
       '#title' => 'Name',
+      '#machine_name' => array(
+        'exists' => array('hello', 'exists'),
+      ),
     );
+
+    $form['machine_name'] = array(
+      '#type' => 'machine_name',
+    );
+
     $form['content_type_list'] = array(
       '#type' => 'select',
       '#title' => 'Content type',
@@ -38,13 +47,17 @@ class AddForm extends FormBase {
   }
 
   function validateForm(array &$form, FormStateInterface $form_state) {
+    $result = CsvImportStorage::exists_importer($form_state->getValue('machine_name'));
+    if (!empty($result)) {
+      $form_state->setErrorByName('machine_name', $this->t('machine name is already exists'));
+    }
     if (strlen($form_state->getValue('import_name')) < 3) {
-      $form_state->setErrorByName('import_name', $this->t('pleae enter the name atleast 3 charachter'));
+      $form_state->setErrorByName('import_name', $this->t('please enter the name atleast 3 charachter'));
     }
   }
 
   function submitForm(array &$form, FormStateInterface $form_state) {
-    CsvImportStorage::add($form_state->getValue('import_name'), $form_state->getValue('content_type_list'));
+    CsvImportStorage::add($form_state->getValue('import_name'), $form_state->getValue('content_type_list'), $form_state->getValue('machine_name'));
     drupal_set_message(t($form_state->getValue('import_name') . ' added successfully'));
     return;
   }
