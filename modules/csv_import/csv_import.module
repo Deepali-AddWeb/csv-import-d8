@@ -42,8 +42,16 @@ function csv_import_menu() {
     'route' => 'csv_field_processor',
   );
   $items['/admin/config/csv_import/list/%/add_processor/%'] = array(
-    'title' => 'Add  processor',
-    'route' => 'csv_field_processor',
+    'title' => 'Add processor',
+    'route' => 'csv_add_field_processor',
+  );
+  $items['/admin/config/csv_import/list/%/delete_processor/%'] = array(
+    'title' => 'delete processor',
+    'route' => 'csv_field_processor_delete',
+  );
+  $items['/admin/config/csv_import/list/%/edit_processor/%'] = array(
+    'title' => 'Edit processor',
+    'route' => 'csv_edit_field_processor',
   );
   return $items;
 }

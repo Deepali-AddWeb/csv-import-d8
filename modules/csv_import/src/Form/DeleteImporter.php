@@ -7,21 +7,21 @@ use Drupal\csv_import\CsvImportStorage;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class DeleteField extends ConfirmFormBase {
+class DeleteImporter extends ConfirmFormBase {
 
   public function getFormId() {
-    return 'csv_import_field_delete';
+    return 'csv_import_importer_delete';
   }
 
   public function getQuestion() {
     $parameters = \Drupal::routeMatch()->getParameters();
-    $content_type = CsvImportStorage::get_field_label($parameters->get('field_id'));
-    return t('Are you sure you want to delete the '.$content_type['source'].' ?');
+    $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
+    return t('Are you sure you want to delete the '.$content_type[0]->name.' ?');
   }
 
   public function getCancelUrl() {
     $parameters = \Drupal::routeMatch()->getParameters();
-    return Url::fromRoute('csv_import_list_fields', array('id' => $parameters->get('id')));
+    return Url::fromRoute('csv_import_root');
   }
 
   public function getDescription() {
@@ -42,9 +42,11 @@ class DeleteField extends ConfirmFormBase {
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $parameters = \Drupal::routeMatch()->getParameters();
-    CsvImportStorage::deletefields($parameters->get('field_id'));
-    drupal_set_message('Processor Deleted successfully');
-    $form_state->setRedirectUrl(Url::fromRoute('csv_import_list_fields', array('id' => $parameters->get('id'))));
+    db_delete('csv_import')->condition('id', $parameters->get('id'))->execute();
+    db_delete('csv_import_fields')->condition('importer_id', $parameters->get('id'))->execute();
+    db_delete('csv_import_processor')->condition('importer_id', $parameters->get('id'))->execute();
+    drupal_set_message('Importer Deleted successfully');
+    $form_state->setRedirectUrl(Url::fromRoute('csv_import_root'));
   }
 
 }

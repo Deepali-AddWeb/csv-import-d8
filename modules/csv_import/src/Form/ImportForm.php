@@ -21,13 +21,13 @@ class ImportForm extends FormBase {
     $file = fopen($file_uri,'r');
     $int_row_count = 0;
     $id = '1';
-    $result = db_query('SELECT source,destination FROM {csv_import_fields} WHERE importer_id = :id', array(':id' => $id))->fetchAll();
+    $result = db_query('SELECT id,source,destination FROM {csv_import_fields} WHERE importer_id = :id', array(':id' => $id))->fetchAll();
     $array_key_val_pair = array();
     
     foreach ($result as $key => $key_val_pair) {
       $array_key_val_pair[trim($key_val_pair->source)] = trim($key_val_pair->destination);
+      $fieldid[trim($key_val_pair->destination)] = $key_val_pair->id;
     }
-   
     while (($line = fgetcsv($file)) !== FALSE) {
       if ($int_row_count == 0) {
         foreach ($line as $first_line_key => $first_line_value) {
@@ -40,7 +40,16 @@ class ImportForm extends FormBase {
         $array_node_import = array();
         $array_node_import = array('type' => 'article');
         foreach ($array_import_pair as $key => $value) {
-          $array_node_import[$value] = explode(',', $line[$key]);
+          $delimeter = CsvImportStorage::getprocessor($fieldid[$value]);
+          if (!empty($delimeter && strpos($line[$key],$delimeter[0]->processor))) {
+            $array_node_import[$value] = explode($delimeter[0]->processor, $line[$key]);
+          }
+          else {
+            $array_node_import[$value] = $line[$key];
+          }
+          $parameters = \Drupal::routeMatch()->getParameters();
+          $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
+
           $field_type = CsvImportStorage::get_field_type('article',$value);
          
           if ($field_type == 'image') {
@@ -59,14 +68,13 @@ class ImportForm extends FormBase {
             }
           }
         }
-       
+       print('<pre style="color:red;">');
+       print_r($array_node_import);
+       print('</pre>');
+       exit;
         $node = Node::create(
           $array_node_import
         );
-        print('<pre style="color:red;">');
-        print_r($array_node_import);
-        print('</pre>');
-        exit;
         $node->save();
       }
       $int_row_count++;

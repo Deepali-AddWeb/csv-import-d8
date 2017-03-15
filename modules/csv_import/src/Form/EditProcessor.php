@@ -8,19 +8,16 @@ use Drupal\csv_import\CsvImportStorage;
 use Drupal\file\Entity\File;
 use Drupal\Core\Url;
 
-class AddProcessor extends FormBase {
+class EditProcessor extends FormBase {
   public function getFormID() {
-    return 'csv_import_add_processor';
+    return 'csv_import_edit_processor';
   }
 
   function buildForm(array $form, FormStateInterface $form_state) {
     $parameters = \Drupal::routeMatch()->getParameters();
     $result = CsvImportStorage::get_field_label($parameters->get('field_id'));
-    
-    $form['importer_id'] = array(
-      '#type' => 'hidden',
-      '#value' => $parameters->get('id'),
-    );
+    $value = CsvImportStorage::getprocessor($parameters->get('field_id'));
+   
     $form['field_id'] = array(
       '#type' => 'hidden',
       '#value' => $parameters->get('field_id'),
@@ -34,13 +31,14 @@ class AddProcessor extends FormBase {
     $form['processor'] = array(
       '#type' => 'textfield',
       '#title' => 'Processor',
+      '#default_value' => $value[0]->processor,
       '#description' => 'Add special character for processing multiple values in CSV field data. For Example #,@@',
       '#required' => TRUE,
     );
     $form['actions'] = array('#type' => 'actions');
     $form['actions']['submit'] = array(
       '#type' => 'submit',
-      '#value' => t('Add Processor'),
+      '#value' => t('Update Processor'),
     );
     return $form;
   }
@@ -52,8 +50,8 @@ class AddProcessor extends FormBase {
   }
 
   function submitForm(array &$form, FormStateInterface $form_state) {
-    CsvImportStorage::addfieldprocessor($form_state->getValue('field_id'), $form_state->getValue('processor'), $form_state->getValue('importer_id'));
-    drupal_set_message('Processor configured successfully');
+    CsvImportStorage::updatefieldprocessor($form_state->getValue('field_id'), $form_state->getValue('processor'));
+    drupal_set_message('Processor Updated successfully');
     return;
   }
 }

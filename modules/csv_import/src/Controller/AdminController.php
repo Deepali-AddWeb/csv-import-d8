@@ -11,13 +11,12 @@ use Drupal\file\Entity\File;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AdminController {
-  
+
   public function content() {
 
    $header = array(
       'id' => t('Id'),
       'name' => t('Name'),
-      'machine name' => t('Machine name'),
       'content type' => t('Content Type'),
       'operations' => t('Action'),
     );
@@ -48,7 +47,7 @@ class AdminController {
         ),
       );
       $rows[] = array(
-        'data' => array($n, $content->name, $content->machine_name, $content->content_type ,drupal_render($actions))
+        'data' => array($n, $content->name, $content->content_type ,drupal_render($actions))
       );
       $n++;
     }
@@ -65,6 +64,7 @@ class AdminController {
 
     return $table;
   }
+
 
   public function list_importer_fields() {
     global $base_path;
@@ -112,13 +112,15 @@ class AdminController {
     return $table;
   }
 
+
   public function delete_importer_fields() {
     global $base_root;
     global $base_path;
     $parameters = \Drupal::routeMatch()->getParameters();
     CsvImportStorage::deletefields($parameters->get('field_id'));
-     return new TrustedRedirectResponse($base_root.$base_path.'admin/config/csv_import/list/'.$parameters->get('id'));
+    return new TrustedRedirectResponse($base_root.$base_path.'admin/config/csv_import/list/'.$parameters->get('id'));
   }
+
 
   public function delete_importer() {
     $parameters = \Drupal::routeMatch()->getParameters();
@@ -127,32 +129,62 @@ class AdminController {
     return new RedirectResponse(\Drupal::url('csv_import_root'));
   }
 
+  public function delete_processor() {
+    global $base_root;
+    global $base_path;
+    $parameters = \Drupal::routeMatch()->getParameters();
+    db_delete('csv_import_processor')->condition('field_id', $parameters->get('field_id'))->execute();
+   return new TrustedRedirectResponse($base_root.$base_path.'admin/config/csv_import/list/'.$parameters->get('id').'/field_processor');
+  }
+
+
   public function field_processor() {
 
    $header = array(
-      'id' => t('Id'),
-      'name' => t('Field Name'),
-      'machine name' => t('Machine name'),
-      'processor' => t('Processor'),
-      'operations' => t('Action'),
-    );
+     'id' => t('Id'),
+     'name' => t('Source Name'),
+     'machine name' => t('Machine name'),
+     'processor' => t('Processor'),
+     'operations' => t('Action'),
+  );
   $rows = array();
   $parameters = \Drupal::routeMatch()->getParameters();
   $result = CsvImportStorage::getimporter_fields($parameters->get('id'));
   $n = 1;
- 
   foreach(CsvImportStorage::getimporter_fields($parameters->get('id')) as $id=>$content) {
-    $actions = array(
-      '#type' => 'dropbutton',
-      '#links' => array(
-        'map fields' => array(
-          'title' => 'Add processor',
-          'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/add_processor/'.$content->id),
+    $result = CsvImportStorage::getprocessor($content->id);
+
+    if (empty($result)) {
+      $processor = 'No Processor added yet';
+      $actions = array(
+        '#type' => 'dropbutton',
+        '#links' => array(
+          'map fields' => array(
+            'title' => 'Add processor',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/add_processor/'.$content->id),
+          ),
         ),
-      ),
-    );
+      );
+    }
+    else {
+      $processor = $result[0]->processor;
+      $actions = array(
+        '#type' => 'dropbutton',
+        '#links' => array(
+          'Edit Processor' => array(
+            'title' => 'Edit processor',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/edit_processor/'.$content->id),
+          ),
+          'Delete Processor' => array(
+            'title' => 'Delete processor',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/delete_processor/'.$content->id),
+          ),
+        ),
+      );
+    }
+
     $rows[] = array(
-      'data' => array($n, $content->source, $content->destination, 'No Processor added yet' ,drupal_render($actions))
+      'data' => array($n, $content->source, $content->destination, $processor ,drupal_render($actions))
     );
     $n++;
   }

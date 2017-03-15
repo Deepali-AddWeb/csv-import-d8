@@ -7,11 +7,6 @@ function csv_import_schema() {
         'type'=>'serial',
         'not null' => TRUE,
       ),
-      'machine_name'=>array(
-        'type'=>'varchar',
-        'length' => 40,
-        'not null' => TRUE,
-      ),
       'name'=>array(
         'type' => 'varchar',
         'length' => 40,
@@ -54,6 +49,11 @@ function csv_import_schema() {
     'fields' => array(
       'id'=>array(
         'type'=>'serial',
+        'not null' => TRUE,
+      ),
+      'importer_id'=>array(
+        'type' => 'varchar',
+        'length' => 40,
         'not null' => TRUE,
       ),
       'field_id'=>array(

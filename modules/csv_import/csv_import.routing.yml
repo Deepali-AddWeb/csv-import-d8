@@ -65,7 +65,7 @@ csv_importer_edit_fields:
 csv_delete_importer:
   path: '/admin/config/csv_import/delete/{id}'
   defaults:
-     _controller: '\Drupal\csv_import\Controller\AdminController::delete_importer'
+     _form: '\Drupal\csv_import\Form\DeleteImporter'
      _title: 'Delete importer'
   requirements: 
     _permission: 'access content'
@@ -78,10 +78,27 @@ csv_field_processor:
   requirements: 
     _permission: 'access content'
 
-csv_field_processor:
+csv_add_field_processor:
   path: '/admin/config/csv_import/list/{id}/add_processor/{field_id}'
   defaults:
      _form: '\Drupal\csv_import\Form\AddProcessor'
      _title: 'Add field processor'
-  requirements: 
+  requirements:
     _permission: 'access content'
+
+csv_field_processor_delete:
+  path: '/admin/config/csv_import/list/{id}/delete_processor/{field_id}'
+  defaults:
+    _controller: '\Drupal\csv_import\Controller\AdminController::delete_processor'
+    _title: 'delete processor in Importer'
+  requirements:
+    _permission: 'access content'
+
+csv_edit_field_processor:
+  path: '/admin/config/csv_import/list/{id}/edit_processor/{field_id}'
+  defaults:
+     _form: '\Drupal\csv_import\Form\EditProcessor'
+     _title: 'Edit field processor'
+  requirements:
+    _permission: 'access content'
+

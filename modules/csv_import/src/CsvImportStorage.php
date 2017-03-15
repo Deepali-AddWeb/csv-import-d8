@@ -7,7 +7,7 @@ use Drupal\Core\Entity;
 class CsvImportStorage {
   static function get_field_type($node_type, $field_machinename) {
     foreach (\Drupal::entityManager()->getFieldDefinitions('node', $node_type) as $field_name => $field_definition) {
-        if($field_machinename == $field_name) {
+        if ($field_machinename == $field_name) {
           return $field_definition->getType();
         }
     }
@@ -18,8 +18,8 @@ class CsvImportStorage {
     return $result;
   }
 
-  static function exists_importer($machine_name) {
-    $result = db_query('SELECT * FROM {csv_import} WHERE machine_name = :machine_name', array(':machine_name' => $machine_name))->fetchAll();
+  static function getprocessor($field_id) {
+    $result = db_query('SELECT * FROM {csv_import_processor} WHERE field_id = :field_id', array(':field_id' => $field_id))->fetchAll();
     return $result;
   }
 
@@ -38,11 +38,10 @@ class CsvImportStorage {
     return $result;
   }
 
-  static function add($name, $content_type , $machine_name) {
+  static function add($name, $content_type) {
     db_insert('csv_import')->fields(array(
       'name' => $name,
       'content_type' => $content_type,
-      'machine_name' => $machine_name,
     ))->execute();
   }
 
@@ -63,6 +62,14 @@ class CsvImportStorage {
     -> execute();
   }
 
+  static function updatefieldprocessor($field_id, $processor) {
+    db_update('csv_import_processor')->fields(array(
+      'processor' => $processor,
+    ))
+    ->condition('field_id', $field_id, '=')
+    -> execute();
+  }
+
   static function deleteimporter($id) {
     db_delete('csv_import')->condition('id', $id)->execute();
   }
@@ -77,6 +84,13 @@ class CsvImportStorage {
     ))
     ->condition('id', $id, '=')
     -> execute();
+  }
+  static function addfieldprocessor($field_id, $processor, $importer_id) {
+    db_insert('csv_import_processor')->fields(array(
+      'importer_id' => $importer_id,
+      'field_id' => $field_id,
+      'processor' => $processor,
+    ))->execute();
   }
 
 }
