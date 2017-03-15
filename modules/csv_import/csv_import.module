@@ -37,8 +37,12 @@ function csv_import_menu() {
     'title' => 'Edit content',
     'route' => 'edit_importer',
   );
-  $items['/admin/config/csv_import/list/%/add_processer/%'] = array(
-    'title' => 'Add processor',
+  $items['/admin/config/csv_import/list/%/field_processor'] = array(
+    'title' => 'Field processor',
+    'route' => 'csv_field_processor',
+  );
+  $items['/admin/config/csv_import/list/%/add_processor/%'] = array(
+    'title' => 'Add  processor',
     'route' => 'csv_field_processor',
   );
   return $items;

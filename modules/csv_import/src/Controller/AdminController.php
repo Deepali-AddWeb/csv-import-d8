@@ -131,54 +131,42 @@ class AdminController {
 
    $header = array(
       'id' => t('Id'),
-      'name' => t('Name'),
+      'name' => t('Field Name'),
       'machine name' => t('Machine name'),
-      'content type' => t('Content Type'),
+      'processor' => t('Processor'),
       'operations' => t('Action'),
     );
-    $rows = array();
-    $n = 1;
-    
-    foreach(CsvImportStorage::getAll() as $id=>$content) {
-    
-      $actions = array(
-        '#type' => 'dropbutton',
-        '#links' => array(
-          'map fields' => array(
-            'title' => 'Map Fields',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->id),
-          ),
-          'edit' => array(
-            'title' => 'Edit',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/edit/'.$content->id),
-          ),
-          'Import' => array(
-            'title' => 'Import',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/import/'.$content->id),
-          ),
-          'delete' => array(
-            'title' => 'Delete',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/delete/'.$content->id),
-          ),
+  $rows = array();
+  $parameters = \Drupal::routeMatch()->getParameters();
+  $result = CsvImportStorage::getimporter_fields($parameters->get('id'));
+  $n = 1;
+ 
+  foreach(CsvImportStorage::getimporter_fields($parameters->get('id')) as $id=>$content) {
+    $actions = array(
+      '#type' => 'dropbutton',
+      '#links' => array(
+        'map fields' => array(
+          'title' => 'Add processor',
+          'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/add_processor/'.$content->id),
         ),
-      );
-      $rows[] = array(
-        'data' => array($n, $content->name, $content->machine_name, $content->content_type ,drupal_render($actions))
-      );
-      $n++;
-    }
-
-    $table = array(
-      '#type' => 'table',
-      '#header' => $header,
-      '#rows' => $rows,
-      '#attributes' => array(
-        'id' => 'bd-contact-table',
       ),
-      '#empty' => 'No importer added yet'
     );
+    $rows[] = array(
+      'data' => array($n, $content->source, $content->destination, 'No Processor added yet' ,drupal_render($actions))
+    );
+    $n++;
+  }
+  $table = array(
+    '#type' => 'table',
+    '#header' => $header,
+    '#rows' => $rows,
+    '#attributes' => array(
+      'id' => 'bd-contact-table',
+    ),
+    '#empty' => 'No fields mapped yet'
+  );
 
-    return $table;
+  return $table;
   }
 
 }

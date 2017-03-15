@@ -50,6 +50,26 @@ function csv_import_schema() {
     'primary key' => array('id'),
   );
 
+  $schema['csv_import_processor'] = array(
+    'fields' => array(
+      'id'=>array(
+        'type'=>'serial',
+        'not null' => TRUE,
+      ),
+      'field_id'=>array(
+        'type' => 'varchar',
+        'length' => 40,
+        'not null' => TRUE,
+      ),
+      'processor'=>array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
   return $schema;
 
 }
