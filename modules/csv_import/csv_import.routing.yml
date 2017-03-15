@@ -89,7 +89,7 @@ csv_add_field_processor:
 csv_field_processor_delete:
   path: '/admin/config/csv_import/list/{id}/delete_processor/{field_id}'
   defaults:
-    _controller: '\Drupal\csv_import\Controller\AdminController::delete_processor'
+    _form: '\Drupal\csv_import\Form\DeleteProcessor'
     _title: 'delete processor in Importer'
   requirements:
     _permission: 'access content'

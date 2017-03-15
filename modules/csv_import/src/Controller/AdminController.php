@@ -113,22 +113,6 @@ class AdminController {
   }
 
 
-  public function delete_importer_fields() {
-    global $base_root;
-    global $base_path;
-    $parameters = \Drupal::routeMatch()->getParameters();
-    CsvImportStorage::deletefields($parameters->get('field_id'));
-    return new TrustedRedirectResponse($base_root.$base_path.'admin/config/csv_import/list/'.$parameters->get('id'));
-  }
-
-
-  public function delete_importer() {
-    $parameters = \Drupal::routeMatch()->getParameters();
-    db_delete('csv_import')->condition('id', $parameters->get('id'))->execute();
-    db_delete('csv_import_fields')->condition('importer_id', $parameters->get('id'))->execute();
-    return new RedirectResponse(\Drupal::url('csv_import_root'));
-  }
-
   public function delete_processor() {
     global $base_root;
     global $base_path;
