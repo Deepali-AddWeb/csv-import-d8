@@ -40,6 +40,10 @@ class AdminController {
             'title' => 'Import',
             'url' => Url::fromUri('internal:/admin/config/csv_import/import/'.$content->id),
           ),
+          'field processor' => array(
+            'title' => 'Field processor',
+            'url' => Url::fromUri('internal:/admin/config/csv_import/'.$content->id.'field_processor'),
+          ),
           'delete' => array(
             'title' => 'Delete',
             'url' => Url::fromUri('internal:/admin/config/csv_import/delete/'.$content->id),

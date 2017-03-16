@@ -16,7 +16,6 @@ class DeleteProcessor extends ConfirmFormBase {
   public function getQuestion() {
     $parameters = \Drupal::routeMatch()->getParameters();
     $processor = CsvImportStorage::get_field_label($parameters->get('field_id'));
-    
     return t('Are you sure you want to delete the Processor for '.$processor['source'].' ?');
   }
 
@@ -43,7 +42,7 @@ class DeleteProcessor extends ConfirmFormBase {
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $parameters = \Drupal::routeMatch()->getParameters();
-    db_delete('csv_import_processor')->condition('importer_id', $parameters->get('id'))->execute();
+    db_delete('csv_import_processor')->condition('field_id', $parameters->get('field_id'))->execute();
     drupal_set_message('Processor Deleted successfully');
     $form_state->setRedirectUrl(Url::fromRoute('csv_field_processor', array('id' => $parameters->get('id'))));
   }

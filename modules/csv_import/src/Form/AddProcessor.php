@@ -7,6 +7,8 @@ use Drupal\Core\Entity;
 use Drupal\csv_import\CsvImportStorage;
 use Drupal\file\Entity\File;
 use Drupal\Core\Url;
+use Drupal\Core\Routing\TrustedRedirectResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AddProcessor extends FormBase {
   public function getFormID() {
@@ -52,8 +54,9 @@ class AddProcessor extends FormBase {
   }
 
   function submitForm(array &$form, FormStateInterface $form_state) {
+    $parameters = \Drupal::routeMatch()->getParameters();
     CsvImportStorage::addfieldprocessor($form_state->getValue('field_id'), $form_state->getValue('processor'), $form_state->getValue('importer_id'));
-    drupal_set_message('Processor configured successfully');
-    return;
+    drupal_set_message('Field Processor added successfully');
+    $form_state->setRedirectUrl(Url::fromRoute('csv_field_processor', array('id' => $parameters->get('id'))));
   }
 }

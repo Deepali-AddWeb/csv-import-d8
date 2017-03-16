@@ -34,7 +34,7 @@ csv_import_list_fields:
   path: '/admin/config/csv_import/list/{id}'
   defaults:
      _controller: '\Drupal\csv_import\Controller\AdminController::list_importer_fields'
-     _title: 'Fields Importer'
+     _title: 'Fields Mapping'
   requirements:
     _permission: 'access content'
 
