@@ -18,6 +18,14 @@ class ImportForm extends FormBase {
   function buildForm(array $form, FormStateInterface $form_state) {
     
     $parameters = \Drupal::routeMatch()->getParameters();
+    /*$result = db_query('SELECT * FROM {csv_import_processor} WHERE field_id = :field_id','destination' = ':title', array(':field_id' => $field_id,':title' =>'title'))->fetchAll();
+    print('<pre style="color:red;">');
+    print_r($result);
+    print('</pre>');
+    exit;
+    if (CsvImportStorage::getimporter_fields) {
+
+    }*/
     $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
     $content_type = $content_type[0]->content_type;
     $form['content_name'] = array(
@@ -75,7 +83,7 @@ class ImportForm extends FormBase {
     $file_uri = file_create_url($file_path);
     $file = fopen($file_uri,'r');
     $int_row_count = 0;
-    
+    $node_created = 0;
     while (($line = fgetcsv($file)) !== FALSE) {
       if ($int_row_count == 0) {
         foreach ($line as $first_line_key => $first_line_value) {
@@ -88,6 +96,7 @@ class ImportForm extends FormBase {
         $array_node_import = array();
         $array_node_import = array('type' => $content_type);
         foreach ($array_import_pair as $key => $value) {
+          
           $delimeter = CsvImportStorage::getprocessor($fieldid[$value]);
           if (!empty($delimeter && strpos($line[$key],$delimeter[0]->processor))) {
             $array_node_import[$value] = explode($delimeter[0]->processor, $line[$key]);
@@ -116,29 +125,27 @@ class ImportForm extends FormBase {
             }
           }
         }
-      
-        $node = Node::create(
-          $array_node_import
-        );
-        if($node->save()){
-          print('<pre style="color:red;">');
-          print_r('sucess');
-          print('</pre>');
-          exit;
-        }
-        else{
-          print('<pre style="color:red;">');
-          print_r('fail');
-          print('</pre>');
-          exit;
-        }
         
+        if (!empty($array_node_import['title'])) {
+          $node = Node::create(
+            $array_node_import
+          );
+          $node->save();
+          $node_created++;
+        }
+       
       }
       $int_row_count++;
     }
     fclose($file);
-    //exit;
-    drupal_set_message(($int_row_count-1).' Node Imported  successfully');
+    if ($node_created == '0') {
+      $msg = 'No node created';
+    }
+    else {
+      $msg = $node_created.' Node Imported  successfully';
+    }
+    
+    drupal_set_message($msg);
   }
  
 }

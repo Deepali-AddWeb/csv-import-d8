@@ -14,7 +14,7 @@ class AdminController {
 
   public function content() {
 
-   $header = array(
+    $header = array(
       'id' => t('Id'),
       'name' => t('Name'),
       'content type' => t('Content Type'),

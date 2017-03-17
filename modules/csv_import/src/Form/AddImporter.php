@@ -49,7 +49,12 @@ class AddImporter extends FormBase {
   }
 
   function submitForm(array &$form, FormStateInterface $form_state) {
-    CsvImportStorage::add($form_state->getValue('import_name'), $form_state->getValue('content_type_list'));
+    $result =  CsvImportStorage::add($form_state->getValue('import_name'), $form_state->getValue('content_type_list'));
+    print('<pre style="color:red;">');
+    print_r($result);
+    print('</pre>');
+    exit;
+     CsvImportStorage::addimporterfields($form_state->getValue('import_id'), 'Title','title');
     drupal_set_message(t($form_state->getValue('import_name') . ' added successfully'));
     return;
   }
