@@ -1,6 +1,10 @@
 <?php
 
+/**
+ * Implements hook_schema().
+ */
 function csv_import_schema() {
+  //storing the importer details in db
   $schema['csv_import'] = array(
     'fields' => array(
       'id'=>array(
@@ -20,6 +24,8 @@ function csv_import_schema() {
     ),
     'primary key' => array('id'),
   );
+
+  //storing the importer mapping fields in db
   $schema['csv_import_fields'] = array(
     'fields' => array(
       'id'=>array(
@@ -44,7 +50,8 @@ function csv_import_schema() {
     ),
     'primary key' => array('id'),
   );
-
+  
+  //storing the field processor information in db
   $schema['csv_import_processor'] = array(
     'fields' => array(
       'id'=>array(

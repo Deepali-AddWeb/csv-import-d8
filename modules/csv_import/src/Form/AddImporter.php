@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Add Importer Form
+ */
 namespace Drupal\csv_import\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -14,8 +17,10 @@ class AddImporter extends FormBase {
     return 'csv_import.csv_import_add';
   }
 
+  // Importer build Form
   function buildForm(array $form, FormStateInterface $form_state) {
-    $contentTypes = \Drupal::service('entity.manager')->getStorage('node_type')->loadMultiple();
+    $contentTypes = \Drupal::service('entity.manager')
+      ->getStorage('node_type')->loadMultiple();
     $contentTypesList = [];
     foreach ($contentTypes as $contentType) {
       $contentTypesList[$contentType->id()] = $contentType->label();
@@ -42,20 +47,21 @@ class AddImporter extends FormBase {
     return $form;
   }
 
+  // Add Importer validate Form
   function validateForm(array &$form, FormStateInterface $form_state) {
     if (strlen($form_state->getValue('import_name')) < 3) {
-      $form_state->setErrorByName('import_name', $this->t('please enter the name atleast 3 charachter'));
+      $form_state->setErrorByName('import_name', 
+        $this->t('Please enter the name atleast 3 character'));
     }
   }
 
+  // Add importer submit Form
   function submitForm(array &$form, FormStateInterface $form_state) {
-    $result =  CsvImportStorage::add($form_state->getValue('import_name'), $form_state->getValue('content_type_list'));
-    print('<pre style="color:red;">');
-    print_r($result);
-    print('</pre>');
-    exit;
-     CsvImportStorage::addimporterfields($form_state->getValue('import_id'), 'Title','title');
-    drupal_set_message(t($form_state->getValue('import_name') . ' added successfully'));
+    $result = CsvImportStorage::add($form_state->getValue('import_name'),
+     $form_state->getValue('content_type_list'));
+    drupal_set_message(t($form_state->getValue('import_name') . 
+      ' added successfully'));
+    $form_state->setRedirectUrl(Url::fromRoute('csv_import_root'));
     return;
   }
 

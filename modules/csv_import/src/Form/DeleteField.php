@@ -1,4 +1,8 @@
 <?php
+
+/**
+ * Delete field confirmation Form
+ */
 namespace Drupal\csv_import\Form;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -21,7 +25,8 @@ class DeleteField extends ConfirmFormBase {
 
   public function getCancelUrl() {
     $parameters = \Drupal::routeMatch()->getParameters();
-    return Url::fromRoute('csv_import_list_fields', array('id' => $parameters->get('id')));
+    return Url::fromRoute('csv_import_list_fields', 
+      array('id' => $parameters->get('id')));
   }
 
   public function getDescription() {
@@ -44,7 +49,8 @@ class DeleteField extends ConfirmFormBase {
     $parameters = \Drupal::routeMatch()->getParameters();
     CsvImportStorage::deletefields($parameters->get('field_id'));
     drupal_set_message('Processor Deleted successfully');
-    $form_state->setRedirectUrl(Url::fromRoute('csv_import_list_fields', array('id' => $parameters->get('id'))));
+    $form_state->setRedirectUrl(Url::fromRoute('csv_import_list_fields', 
+      array('id' => $parameters->get('id'))));
   }
 
 }

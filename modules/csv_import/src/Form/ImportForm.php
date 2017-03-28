@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Edit Form of importer fields
+ */
 namespace Drupal\csv_import\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Field;
@@ -11,6 +14,7 @@ use Drupal\node\Entity\Node;
 use Drupal\file\Entity\File;
 
 class ImportForm extends FormBase {
+
   public function getFormID() {
     return 'csv_import_form';
   }
@@ -18,14 +22,6 @@ class ImportForm extends FormBase {
   function buildForm(array $form, FormStateInterface $form_state) {
     
     $parameters = \Drupal::routeMatch()->getParameters();
-    /*$result = db_query('SELECT * FROM {csv_import_processor} WHERE field_id = :field_id','destination' = ':title', array(':field_id' => $field_id,':title' =>'title'))->fetchAll();
-    print('<pre style="color:red;">');
-    print_r($result);
-    print('</pre>');
-    exit;
-    if (CsvImportStorage::getimporter_fields) {
-
-    }*/
     $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
     $content_type = $content_type[0]->content_type;
     $form['content_name'] = array(
@@ -62,6 +58,7 @@ class ImportForm extends FormBase {
   }
 
   function submitForm(array &$form, FormStateInterface $form_state) {
+
     $parameters = \Drupal::routeMatch()->getParameters();
     $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
     $content_type = $content_type[0]->content_type;
@@ -98,7 +95,7 @@ class ImportForm extends FormBase {
         foreach ($array_import_pair as $key => $value) {
           
           $delimeter = CsvImportStorage::getprocessor($fieldid[$value]);
-          if (!empty($delimeter && strpos($line[$key],$delimeter[0]->processor))) {
+          if (!empty($delimeter && strpos($line[$key], $delimeter[0]->processor))) {
             $array_node_import[$value] = explode($delimeter[0]->processor, $line[$key]);
           }
           else {

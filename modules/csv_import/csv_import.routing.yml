@@ -1,5 +1,5 @@
 csv_import_root:
-  path: '/admin/config/csv_import'
+  path: '/admin/config/development/csv_import'
   defaults:
     _controller: '\Drupal\csv_import\Controller\AdminController::content'
     _title: 'Node Import Using CSV'
@@ -7,7 +7,7 @@ csv_import_root:
     _permission: 'access content'
 
 csv_import_add:
-  path: '/admin/config/csv_import/add'
+  path: '/admin/config/development/csv_import/add'
   defaults:
      _form: '\Drupal\csv_import\Form\AddImporter'
      _title: 'Create Importer'
@@ -15,7 +15,7 @@ csv_import_add:
     _permission: 'access content'
 
 edit_importer:
-  path: '/admin/config/csv_import/edit/{id}'
+  path: '/admin/config/development/csv_import/edit/{id}'
   defaults:
      _form: '\Drupal\csv_import\Form\EditImporter'
      _title: 'Edit importer'
@@ -23,7 +23,7 @@ edit_importer:
     _permission: 'access content'
 
 import_content:
-  path: '/admin/config/csv_import/import/{id}'
+  path: '/admin/config/development/csv_import/import/{id}'
   defaults:
      _form: '\Drupal\csv_import\Form\ImportForm'
      _title: 'Import content'
@@ -31,7 +31,7 @@ import_content:
     _permission: 'access content'
 
 csv_import_list_fields:
-  path: '/admin/config/csv_import/list/{id}'
+  path: '/admin/config/development/csv_import/list/{id}'
   defaults:
      _controller: '\Drupal\csv_import\Controller\AdminController::list_importer_fields'
      _title: 'Fields Mapping'
@@ -39,7 +39,7 @@ csv_import_list_fields:
     _permission: 'access content'
 
 csv_importer_add_fields:
-  path: '/admin/config/csv_import/list/{id}/add'
+  path: '/admin/config/development/csv_import/list/{id}/add'
   defaults:
      _form: '\Drupal\csv_import\Form\AddFieldForm'
      _title: 'Add fields in Importer'
@@ -47,7 +47,7 @@ csv_importer_add_fields:
     _permission: 'access content'
 
 csv_importer_delete_fields:
-  path: '/admin/config/csv_import/list/{id}/delete/{field_id}'
+  path: '/admin/config/development/csv_import/list/{id}/delete/{field_id}'
   defaults:
      _form: '\Drupal\csv_import\Form\DeleteField'
      _title: 'delete fields in Importer'
@@ -55,7 +55,7 @@ csv_importer_delete_fields:
     _permission: 'access content'
 
 csv_importer_edit_fields:
-  path: '/admin/config/csv_import/list/{id}/edit/{field_id}'
+  path: '/admin/config/development/csv_import/list/{id}/edit/{field_id}'
   defaults:
      _form: '\Drupal\csv_import\Form\EditFieldForm'
      _title: 'Edit field in Importer'
@@ -63,7 +63,7 @@ csv_importer_edit_fields:
     _permission: 'access content'
 
 csv_delete_importer:
-  path: '/admin/config/csv_import/delete/{id}'
+  path: '/admin/config/development/csv_import/delete/{id}'
   defaults:
      _form: '\Drupal\csv_import\Form\DeleteImporter'
      _title: 'Delete importer'
@@ -71,7 +71,7 @@ csv_delete_importer:
     _permission: 'access content'
 
 csv_field_processor:
-  path: '/admin/config/csv_import/list/{id}/field_processor'
+  path: '/admin/config/development/csv_import/list/{id}/field_processor'
   defaults:
      _controller: '\Drupal\csv_import\Controller\AdminController::field_processor'
      _title: 'Add field processor'
@@ -79,7 +79,7 @@ csv_field_processor:
     _permission: 'access content'
 
 csv_add_field_processor:
-  path: '/admin/config/csv_import/list/{id}/add_processor/{field_id}'
+  path: '/admin/config/development/csv_import/list/{id}/add_processor/{field_id}'
   defaults:
      _form: '\Drupal\csv_import\Form\AddProcessor'
      _title: 'Add field processor'
@@ -87,7 +87,7 @@ csv_add_field_processor:
     _permission: 'access content'
 
 csv_field_processor_delete:
-  path: '/admin/config/csv_import/list/{id}/delete_processor/{field_id}'
+  path: '/admin/config/development/csv_import/list/{id}/delete_processor/{field_id}'
   defaults:
     _form: '\Drupal\csv_import\Form\DeleteProcessor'
     _title: 'delete processor in Importer'
@@ -95,10 +95,12 @@ csv_field_processor_delete:
     _permission: 'access content'
 
 csv_edit_field_processor:
-  path: '/admin/config/csv_import/list/{id}/edit_processor/{field_id}'
+  path: '/admin/config/development/csv_import/list/{id}/edit_processor/{field_id}'
   defaults:
      _form: '\Drupal\csv_import\Form\EditProcessor'
      _title: 'Edit field processor'
   requirements:
     _permission: 'access content'
+
+
 

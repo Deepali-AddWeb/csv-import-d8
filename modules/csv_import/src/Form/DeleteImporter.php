@@ -1,4 +1,8 @@
 <?php
+
+/**
+ * Delete Importer confirmation Form
+ */
 namespace Drupal\csv_import\Form;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -43,8 +47,10 @@ class DeleteImporter extends ConfirmFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $parameters = \Drupal::routeMatch()->getParameters();
     db_delete('csv_import')->condition('id', $parameters->get('id'))->execute();
-    db_delete('csv_import_fields')->condition('importer_id', $parameters->get('id'))->execute();
-    db_delete('csv_import_processor')->condition('importer_id', $parameters->get('id'))->execute();
+    db_delete('csv_import_fields')->condition('importer_id', 
+      $parameters->get('id'))->execute();
+    db_delete('csv_import_processor')->condition('importer_id', 
+      $parameters->get('id'))->execute();
     drupal_set_message('Importer Deleted successfully');
     $form_state->setRedirectUrl(Url::fromRoute('csv_import_root'));
   }

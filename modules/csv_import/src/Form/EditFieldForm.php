@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Edit Form of importer fields
+ */
 namespace Drupal\csv_import\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -26,6 +29,7 @@ class EditFieldForm extends FormBase {
         $bundleFields[$field_name] = $field_definition->getLabel().' ('.$field_name.')';
       }
     } 
+    unset($bundleFields['comment']);
     $form['field_id'] = array(
       '#type' => 'hidden',
       '#value' => $parameters->get('field_id'),
@@ -56,9 +60,13 @@ class EditFieldForm extends FormBase {
     }
   }
 
+  // Edit field submitForm
   function submitForm(array &$form, FormStateInterface $form_state) {
-    CsvImportStorage::updateimporterfields($form_state->getValue('field_id'), $form_state->getValue('source'), $form_state->getValue('destination'));
-    drupal_set_message(t($form_state->getValue('source').' ('.$form_state->getValue('destination').') field Added successfully'));
+    $parameters = \Drupal::routeMatch()->getParameters();
+    CsvImportStorage::updateimporterfields($form_state->getValue('field_id'),
+     $form_state->getValue('source'), $form_state->getValue('destination'));
+    drupal_set_message(t($form_state->getValue('source') . ' (' . $form_state->getValue('destination').') field Updated successfully'));
+    $form_state->setRedirectUrl(Url::fromRoute('csv_import_list_fields', array('id' => $parameters->get('id'))));
     return;
   }
 

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Add field Processor Form
+ */
 namespace Drupal\csv_import\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -15,6 +18,7 @@ class AddProcessor extends FormBase {
     return 'csv_import_add_processor';
   }
 
+  // field processor build form
   function buildForm(array $form, FormStateInterface $form_state) {
     $parameters = \Drupal::routeMatch()->getParameters();
     $result = CsvImportStorage::get_field_label($parameters->get('field_id'));
@@ -36,7 +40,8 @@ class AddProcessor extends FormBase {
     $form['processor'] = array(
       '#type' => 'textfield',
       '#title' => 'Processor',
-      '#description' => 'Add special character for processing multiple values in CSV field data. For Example #,@@',
+      '#description' => 'Add special character for processing multiple
+         values in CSV field data. For Example #,@@',
       '#required' => TRUE,
     );
     $form['actions'] = array('#type' => 'actions');
@@ -47,16 +52,20 @@ class AddProcessor extends FormBase {
     return $form;
   }
 
+  // field Processor validate form
   function validateForm(array &$form, FormStateInterface $form_state) {
     if (empty($form_state->getValue('processor'))) {
       $form_state->setErrorByName('processor', $this->t('Please Enter the Processor'));
     }
   }
 
+  // field Processor submit form
   function submitForm(array &$form, FormStateInterface $form_state) {
     $parameters = \Drupal::routeMatch()->getParameters();
-    CsvImportStorage::addfieldprocessor($form_state->getValue('field_id'), $form_state->getValue('processor'), $form_state->getValue('importer_id'));
+    CsvImportStorage::addfieldprocessor($form_state->getValue('field_id'),
+     $form_state->getValue('processor'), $form_state->getValue('importer_id'));
     drupal_set_message('Field Processor added successfully');
-    $form_state->setRedirectUrl(Url::fromRoute('csv_field_processor', array('id' => $parameters->get('id'))));
+    $form_state->setRedirectUrl(Url::fromRoute('csv_field_processor', 
+      array('id' => $parameters->get('id'))));
   }
 }

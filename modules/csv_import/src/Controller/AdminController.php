@@ -30,23 +30,23 @@ class AdminController {
         '#links' => array(
           'map fields' => array(
             'title' => 'Map Fields',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->id),
+            'url' => Url::fromUri('internal:/admin/config/development/csv_import/list/'.$content->id),
           ),
           'edit' => array(
             'title' => 'Edit',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/edit/'.$content->id),
+            'url' => Url::fromUri('internal:/admin/config/development/csv_import/edit/'.$content->id),
           ),
           'Import' => array(
             'title' => 'Import',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/import/'.$content->id),
+            'url' => Url::fromUri('internal:/admin/config/development/csv_import/import/'.$content->id),
           ),
           'field processor' => array(
             'title' => 'Field processor',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/'.$content->id.'field_processor'),
+            'url' => Url::fromUri('internal:/admin/config/development/csv_import/'.$content->id.'field_processor'),
           ),
           'delete' => array(
             'title' => 'Delete',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/delete/'.$content->id),
+            'url' => Url::fromUri('internal:/admin/config/development/csv_import/delete/'.$content->id),
           ),
         ),
       );
@@ -90,11 +90,11 @@ class AdminController {
         '#links' => array(
           'Edit' => array(
             'title' => 'Edit',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/edit/'.$content->id),
+            'url' => Url::fromUri('internal:/admin/config/development/csv_import/list/'.$content->importer_id.'/edit/'.$content->id),
           ),
           'Delete' => array(
             'title' => 'Delete',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/delete/'.$content->id),
+            'url' => Url::fromUri('internal:/admin/config/development/csv_import/list/'.$content->importer_id.'/delete/'.$content->id),
            ),
         ),
       );
@@ -122,7 +122,7 @@ class AdminController {
     global $base_path;
     $parameters = \Drupal::routeMatch()->getParameters();
     db_delete('csv_import_processor')->condition('field_id', $parameters->get('field_id'))->execute();
-   return new TrustedRedirectResponse($base_root.$base_path.'admin/config/csv_import/list/'.$parameters->get('id').'/field_processor');
+   return new TrustedRedirectResponse($base_root.$base_path.'admin/config/development/csv_import/list/'.$parameters->get('id').'/field_processor');
   }
 
 
@@ -149,7 +149,7 @@ class AdminController {
         '#links' => array(
           'map fields' => array(
             'title' => 'Add processor',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/add_processor/'.$content->id),
+            'url' => Url::fromUri('internal:/admin/config/development/csv_import/list/'.$content->importer_id.'/add_processor/'.$content->id),
           ),
         ),
       );
@@ -161,11 +161,11 @@ class AdminController {
         '#links' => array(
           'Edit Processor' => array(
             'title' => 'Edit processor',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/edit_processor/'.$content->id),
+            'url' => Url::fromUri('internal:/admin/config/development/csv_import/list/'.$content->importer_id.'/edit_processor/'.$content->id),
           ),
           'Delete Processor' => array(
             'title' => 'Delete processor',
-            'url' => Url::fromUri('internal:/admin/config/csv_import/list/'.$content->importer_id.'/delete_processor/'.$content->id),
+            'url' => Url::fromUri('internal:/admin/config/development/csv_import/list/'.$content->importer_id.'/delete_processor/'.$content->id),
           ),
         ),
       );
@@ -188,5 +188,5 @@ class AdminController {
 
   return $table;
   }
-
+  
 }
