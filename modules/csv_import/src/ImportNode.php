@@ -12,13 +12,12 @@ use Drupal\file\Entity\File;
 class ImportNode {
 
   // each node create function
-  public static function ImportNodeExample($line, $array_import_pair, $content_type, &$context) {
+  public static function ImportNodeExample($line, $array_import_pair, $content_type, $field_id, &$context) {
     $array_node_import = array();
     $array_node_import = array('type' => $content_type);
     foreach ($array_import_pair as $key => $value) {
       
-      $delimeter = CsvImportStorage::getprocessor($fieldid[$value]);
-
+      $delimeter = CsvImportStorage::getprocessor($field_id[$value]);
       if (!empty($delimeter && strpos($line[$key], $delimeter[0]->processor))) {
         $array_node_import[$value] = explode($delimeter[0]->processor, $line[$key]);
       }
@@ -53,18 +52,16 @@ class ImportNode {
       $node->save();
       $context['results'][] = "created";
     }
-    else {
-      drupal_set_message("node error","error");
-    }
+    
     $context['message'] = $line[0] . ' processing';
 
   }
 
 
   //batch finish function for node import
-  function ImportNodeExampleFinishedCallback($success, $results, $operations) {
+  static function ImportNodeExampleFinishedCallback($success, $results, $operations) {
     if ($success) {
-     $message = \Drupal::translation()->formatPlural(count($results), '0 Node created.', '@count Node Created.');
+     $message = \Drupal::translation()->formatPlural(count($results), 'One Node created.', '@count Nodes Created');
     }
     else {
       $message = t('Finished with an error.');

@@ -20,7 +20,6 @@ class ImportForm extends FormBase {
   }
 
   function buildForm(array $form, FormStateInterface $form_state) {
-
     $parameters = \Drupal::routeMatch()->getParameters();
     $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
     $content_type = $content_type[0]->content_type;
@@ -74,12 +73,11 @@ class ImportForm extends FormBase {
     
     foreach ($result as $key => $key_val_pair) {
       $array_key_val_pair[$key_val_pair->source] = $key_val_pair->destination;
-      $fieldid[$key_val_pair->destination] = $key_val_pair->id;
+      $field_id[$key_val_pair->destination] = $key_val_pair->id;
     }
     $file_uri = file_create_url($file_path);
     $file = fopen($file_uri,'r');
     $int_row_count = 0;
-    $node_created = 0;
     $batch = array(
       'title' => t('Importing Node...'),
       'operations' => array(),
@@ -98,7 +96,7 @@ class ImportForm extends FormBase {
       }
 
       else {
-        $batch['operations'][] = array('\Drupal\csv_import\ImportNode::ImportNodeExample', array($line, $array_import_pair, $content_type));
+        $batch['operations'][] = array('\Drupal\csv_import\ImportNode::ImportNodeExample', array($line, $array_import_pair, $content_type, $field_id));
        } 
       $int_row_count++;
     }
