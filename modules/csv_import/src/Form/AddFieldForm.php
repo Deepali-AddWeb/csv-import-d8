@@ -26,7 +26,7 @@ class AddFieldForm extends FormBase {
     foreach (\Drupal::entityManager()->getFieldDefinitions('node', $content_type)
      as $field_name => $field_definition) {
       if (!empty($field_definition->getTargetBundle())) {
-        $bundleFields[$field_name] = $field_definition->getLabel() . ' ('.$field_name.')';
+        $bundleFields[$field_name] = $field_definition->getLabel() . ' ('.$field_name . ')';
       }
     }
     unset($bundleFields['comment']);
@@ -35,7 +35,7 @@ class AddFieldForm extends FormBase {
       '#value' => $parameters->get('id'),
     );
     $form['source'] = array(
-      '#type' => 'textfield',
+      '#type' => 'machine_name',
       '#title' => 'Source',
     );
     $form['destination'] = array(
@@ -62,10 +62,16 @@ class AddFieldForm extends FormBase {
   // Add field submit form
   function submitForm(array &$form, FormStateInterface $form_state) {
     $parameters = \Drupal::routeMatch()->getParameters();
+
+    //submits the form values 
     CsvImportStorage::addimporterfields($form_state->getValue('import_id'),
      $form_state->getValue('source'), $form_state->getValue('destination'));
-    drupal_set_message(t($form_state->getValue('source').' 
-      ('.$form_state->getValue('destination').') field Added successfully'));
+    
+    //sets sucess message
+    drupal_set_message(t($form_state->getValue('source') . ' 
+      (' . $form_state->getValue('destination') . ') field Added successfully'));
+    
+    //redirects the page
     $form_state->setRedirectUrl(Url::fromRoute('csv_import_list_fields', array('id' => $parameters->get('id'))));
     return;
   }

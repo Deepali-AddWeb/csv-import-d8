@@ -20,7 +20,7 @@ class DeleteImporter extends ConfirmFormBase {
   public function getQuestion() {
     $parameters = \Drupal::routeMatch()->getParameters();
     $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
-    return t('Are you sure you want to delete the '.$content_type[0]->name.' ?');
+    return t('Are you sure you want to delete the ' . $content_type[0]->name . ' ?');
   }
 
   public function getCancelUrl() {

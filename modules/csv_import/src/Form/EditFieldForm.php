@@ -12,6 +12,7 @@ use Drupal\file\Entity\File;
 use Drupal\Core\Url;
 
 class EditFieldForm extends FormBase {
+
   public function getFormID() {
     return 'csv_import.csv_import_add';
   }
@@ -19,14 +20,13 @@ class EditFieldForm extends FormBase {
   function buildForm(array $form, FormStateInterface $form_state) {
     $parameters = \Drupal::routeMatch()->getParameters();
     $label = CsvImportStorage::get_field_label($parameters->get('field_id'));
-    
     $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
 
     $content_type = $content_type[0]->content_type;
     $bundleFields['title'] = 'Title';
     foreach (\Drupal::entityManager()->getFieldDefinitions('node', $content_type) as $field_name => $field_definition) {
       if (!empty($field_definition->getTargetBundle())) {
-        $bundleFields[$field_name] = $field_definition->getLabel().' ('.$field_name.')';
+        $bundleFields[$field_name] = $field_definition->getLabel() . ' (' . $field_name . ')';
       }
     } 
     unset($bundleFields['comment']);
@@ -35,7 +35,7 @@ class EditFieldForm extends FormBase {
       '#value' => $parameters->get('field_id'),
     );
     $form['source'] = array(
-      '#type' => 'textfield',
+      '#type' => 'machine_name',
       '#title' => 'Source',
       '#default_value' => $label['source'],
     );

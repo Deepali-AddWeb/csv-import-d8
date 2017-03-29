@@ -14,6 +14,7 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AddProcessor extends FormBase {
+
   public function getFormID() {
     return 'csv_import_add_processor';
   }
@@ -34,7 +35,7 @@ class AddProcessor extends FormBase {
     $form['field'] = array(
       '#type' => 'textfield',
       '#title' => t('Field Name'),
-      '#default_value' => $result['source'].' ('.$result['destination'].')',
+      '#default_value' => $result['source'] . ' ('.$result['destination'] . ')',
       '#attributes' => array('readonly' => 'readonly'),
     );
     $form['processor'] = array(

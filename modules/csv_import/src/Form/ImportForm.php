@@ -20,13 +20,13 @@ class ImportForm extends FormBase {
   }
 
   function buildForm(array $form, FormStateInterface $form_state) {
-    
+
     $parameters = \Drupal::routeMatch()->getParameters();
     $content_type = CsvImportStorage::getcontent_type_name($parameters->get('id'));
     $content_type = $content_type[0]->content_type;
     $form['content_name'] = array(
       '#type' => 'markup',
-      '#markup' => t('<h1>Import to "<i>'.$content_type.'</i>" content type</h2>'),
+      '#markup' => t('<h1>Import to "<i>' . $content_type . '</i>" content type</h2>'),
     );
 
     $form['importer_id'] = array(
@@ -38,8 +38,8 @@ class ImportForm extends FormBase {
        '#type' => 'managed_file',
        '#title' => t('Choose file'),
        '#upload_validators' => array(
-           'file_validate_extensions' => array('csv'),
-           'file_validate_size' => array(25600000),
+         'file_validate_extensions' => array('csv'),
+         'file_validate_size' => array(25600000),
        ),
        '#upload_location' => 'public://csv',
        '#required' => TRUE,
@@ -54,7 +54,7 @@ class ImportForm extends FormBase {
   }
 
   function validateForm(array &$form, FormStateInterface $form_state) {
-
+    //validation code here
   }
 
   function submitForm(array &$form, FormStateInterface $form_state) {
@@ -69,7 +69,6 @@ class ImportForm extends FormBase {
     $file->save();
     $id = $form_state->getValue('importer_id');
     
-
     $result = db_query('SELECT id,source,destination FROM {csv_import_fields} WHERE importer_id = :id', array(':id' => $id))->fetchAll();
     $array_key_val_pair = array();
     
@@ -81,6 +80,14 @@ class ImportForm extends FormBase {
     $file = fopen($file_uri,'r');
     $int_row_count = 0;
     $node_created = 0;
+    $batch = array(
+      'title' => t('Importing Node...'),
+      'operations' => array(),
+      'init_message' => t('starting of process...'),
+      'progress_message' => t('Processed @current out of @total.'),
+      'error_message' => t('Updating publication date has encountered an error.'),
+      'finished' => '\Drupal\csv_import\ImportNode::ImportNodeExampleFinishedCallback',
+    );
     while (($line = fgetcsv($file)) !== FALSE) {
       if ($int_row_count == 0) {
         foreach ($line as $first_line_key => $first_line_value) {
@@ -89,60 +96,15 @@ class ImportForm extends FormBase {
           }
         }
       }
+
       else {
-        $array_node_import = array();
-        $array_node_import = array('type' => $content_type);
-        foreach ($array_import_pair as $key => $value) {
-          
-          $delimeter = CsvImportStorage::getprocessor($fieldid[$value]);
-          if (!empty($delimeter && strpos($line[$key], $delimeter[0]->processor))) {
-            $array_node_import[$value] = explode($delimeter[0]->processor, $line[$key]);
-          }
-          else {
-            $array_node_import[$value] = $line[$key];
-          }
-          $parameters = \Drupal::routeMatch()->getParameters();
-          
-          $field_type = CsvImportStorage::get_field_type($content_type, $value);
-          
-          if ($field_type == 'image') {
-            $array_image_value = array();
-            $array_node_import[$value] = explode(',', $line[$key]);
-            foreach($array_node_import[$value] as $key1 => $value1) {
-              
-              $file_destination_path = 'public://' . basename($value1);
-              $file_data = file_get_contents($value1);
-              $row_file = file_save_data($file_data, $file_destination_path, FILE_EXISTS_REPLACE);
-              $array_image_value[] = array(
-                'target_id' => $row_file->id(),
-                'alt' => 'My alt',
-                'title' => 'My Title'
-              );
-              $array_node_import[$value] = $array_image_value;
-            }
-          }
-        }
-        
-        if (!empty($array_node_import['title'])) {
-          $node = Node::create(
-            $array_node_import
-          );
-          $node->save();
-          $node_created++;
-        }
-       
-      }
+        $batch['operations'][] = array('\Drupal\csv_import\ImportNode::ImportNodeExample', array($line, $array_import_pair, $content_type));
+       } 
       $int_row_count++;
     }
+    batch_set($batch);
+
     fclose($file);
-    if ($node_created == '0') {
-      $msg = 'No node created';
-    }
-    else {
-      $msg = $node_created.' Node Imported  successfully';
-    }
-    
-    drupal_set_message($msg);
   }
  
 }

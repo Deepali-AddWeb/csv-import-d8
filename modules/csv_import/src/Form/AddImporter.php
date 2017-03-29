@@ -13,6 +13,7 @@ use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeInterface;
 
 class AddImporter extends FormBase {
+
   public function getFormID() {
     return 'csv_import.csv_import_add';
   }
@@ -28,9 +29,6 @@ class AddImporter extends FormBase {
     $form['import_name'] = array(
       '#type' => 'textfield',
       '#title' => 'Name',
-      '#machine_name' => array(
-        'exists' => array('hello', 'exists'),
-      ),
     );
 
     $form['content_type_list'] = array(

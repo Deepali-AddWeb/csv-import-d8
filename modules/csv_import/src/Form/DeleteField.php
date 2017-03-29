@@ -20,7 +20,7 @@ class DeleteField extends ConfirmFormBase {
   public function getQuestion() {
     $parameters = \Drupal::routeMatch()->getParameters();
     $content_type = CsvImportStorage::get_field_label($parameters->get('field_id'));
-    return t('Are you sure you want to delete the '.$content_type['source'].' ?');
+    return t('Are you sure you want to delete the ' . $content_type['source'].' ?');
   }
 
   public function getCancelUrl() {
