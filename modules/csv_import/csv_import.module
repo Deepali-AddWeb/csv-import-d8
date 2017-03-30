@@ -5,55 +5,42 @@
  */
 function csv_import_menu() {
   $items['/admin/config/development/csv_import'] = array(
-    'title' => 'Importer list',
     'route' => 'csv_import_root',
   );
   $items['/admin/config/development/csv_import/add'] = array(
-    'title' => 'Add csv importer',
     'route' => 'csv_import_add',
   );
   $items['/admin/config/development/csv_import/list/%'] = array(
-    'title' => 'List Mapping fields of CSV importer',
     'route' => 'csv_import_list_fields',
   );
   $items['/admin/config/development/csv_import/list/%/add'] = array(
-    'title' => 'Add fields in importer',
     'route' => 'csv_importer_add_fields',
   );
   $items['/admin/config/development/csv_import/list/%/delete/%'] = array(
-    'title' => 'delete fields in importer',
     'route' => 'csv_importer_delete_fields',
   );
   $items['/admin/config/development/csv_import/list/%/edit/%'] = array(
-    'title' => 'Edit field in importer',
     'route' => 'csv_importer_edit_fields',
   );
   $items['/admin/config/development/csv_import/delete/%'] = array(
-    'title' => 'Delete importer',
     'route' => 'csv_delete_importer',
   );
   $items['/admin/config/development/csv_import/import/%'] = array(
-    'title' => 'Import content',
     'route' => 'import_content',
   );
   $items['/admin/config/development/csv_import/edit/%'] = array(
-    'title' => 'Edit content',
     'route' => 'edit_importer',
   );
   $items['/admin/config/development/csv_import/list/%/field_processor'] = array(
-    'title' => 'Field processor',
     'route' => 'csv_field_processor',
   );
   $items['/admin/config/development/csv_import/list/%/add_processor/%'] = array(
-    'title' => 'Add processor',
     'route' => 'csv_add_field_processor',
   );
   $items['/admin/config/development/csv_import/list/%/delete_processor/%'] = array(
-    'title' => 'delete processor',
     'route' => 'csv_field_processor_delete',
   );
   $items['/admin/config/development/csv_import/list/%/edit_processor/%'] = array(
-    'title' => 'Edit processor',
     'route' => 'csv_edit_field_processor',
   );
   return $items;
