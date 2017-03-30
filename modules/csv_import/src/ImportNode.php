@@ -13,6 +13,7 @@ class ImportNode {
 
   // each node create function
   public static function ImportNodeExample($line, $array_import_pair, $content_type, $field_id, &$context) {
+
     $array_node_import = array();
     $array_node_import = array('type' => $content_type);
     foreach ($array_import_pair as $key => $value) {
@@ -50,10 +51,13 @@ class ImportNode {
         $array_node_import
       );
       $node->save();
-      $context['results'][] = "created";
+      $context['results']['success'][] = "success";
+    }
+    else {
+      $context['results']['error'][] = "error";
     }
     
-    $context['message'] = $line[0] . ' processing';
+    $context['message'] = $line[array_search('title',$array_import_pair)] . ' Processing Node';
 
   }
 
@@ -61,11 +65,15 @@ class ImportNode {
   //batch finish function for node import
   static function ImportNodeExampleFinishedCallback($success, $results, $operations) {
     if ($success) {
-     $message = \Drupal::translation()->formatPlural(count($results), 'One Node created.', '@count Nodes Created');
+      $message = \Drupal::translation()->formatPlural(count($results['success']), 'One Node created.', '@count Nodes Created');
+      $node_error = count($results['error']);
     }
     else {
       $message = t('Finished with an error.');
     }
     drupal_set_message($message);
+    if ($node_error) {
+      drupal_set_message($node_error . " Nodes could not be created","error");
+    }
   }
 }

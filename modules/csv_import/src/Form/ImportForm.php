@@ -79,11 +79,11 @@ class ImportForm extends FormBase {
     $file = fopen($file_uri,'r');
     $int_row_count = 0;
     $batch = array(
-      'title' => t('Importing Node...'),
+      'title' => t('Importing CSV file...'),
       'operations' => array(),
-      'init_message' => t('starting of process...'),
+      'init_message' => t('Creating Nodes...'),
       'progress_message' => t('Processed @current out of @total.'),
-      'error_message' => t('Updating publication date has encountered an error.'),
+      'error_message' => t('Node creating using CSV import has encountered an error.'),
       'finished' => '\Drupal\csv_import\ImportNode::ImportNodeExampleFinishedCallback',
     );
     while (($line = fgetcsv($file)) !== FALSE) {
